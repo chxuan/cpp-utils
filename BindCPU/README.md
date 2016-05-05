@@ -1,4 +1,4 @@
-Daemon sample
+BindCPU sample
 ===================
 
 该例程讲解了程序绑定到固定的cpu核心上运行，来提高程序运行效率
