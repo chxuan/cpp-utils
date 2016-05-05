@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void initDaemon()
+bool initDaemon()
 {
     // 屏蔽一些有关控制终端操作的信号
     // 防止守护进程没有正常运转起来时，因控制终端受到干扰退出或挂起
@@ -32,7 +32,7 @@ void initDaemon()
     }
     else if (pid < 0)
     {
-        exit(1);
+        return false;
     }
 
     // 子进程继续运行
@@ -44,7 +44,7 @@ void initDaemon()
     int ret = setsid();
     if (ret < 0)
     {
-        exit(1);
+        return false;
     }
 
     // [3] 禁止进程重新打开控制终端
@@ -58,7 +58,7 @@ void initDaemon()
     }
     else if (pid < 0)
     {
-        exit(1);
+        return false;
     }
 
     // 第二个子进程继续运行
@@ -76,18 +76,24 @@ void initDaemon()
     ret = chdir("/");
     if (ret < 0)
     {
-        exit(1);
+        return false;
     }
 
     // [6] 重新设置文件创建掩码
     // 进程从创建它的父进程那里继承了文件创建掩码，它可能修改守护进程所创建的文件的存取位
     // 所以将文件创建掩码清除
     umask(0);
+
+    return true;
 }
 
 int main()
 {
-    initDaemon();
+    bool ret = initDaemon();
+    if (!ret)
+    {
+        return 1;
+    }
 
     FILE* file = NULL;
     time_t t = 0;
