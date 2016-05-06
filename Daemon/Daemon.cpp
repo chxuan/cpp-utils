@@ -3,9 +3,8 @@
 ************************************************/
 #include <unistd.h>
 #include <signal.h>
-#include <sys/types.h>
-#include <sys/param.h>
-#include <sys/stat.h>
+#include <sys/param.h>  // NOFILE
+#include <sys/stat.h>   // umask
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
