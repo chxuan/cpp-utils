@@ -49,7 +49,7 @@ void forkChildProcess(int)
     if (WIFSIGNALED(status))
     {
         int signalNum = WTERMSIG(status);
-        printf("Signal num: %d\n", signalNum);
+        printf("Child process was killed by signal num: %d\n", signalNum);
     }
 
     // 等待3秒钟重新启动子进程
@@ -73,7 +73,7 @@ bool initWatchDog()
         {
             // 捕获子进程结束信号
             signal(SIGCHLD, forkChildProcess);
-            // 主进程挂起，当有信号来时被唤醒
+            // 父进程挂起，当有信号来时被唤醒
             pause();
         }
     }
@@ -88,7 +88,6 @@ bool initWatchDog()
 int main()
 {
     printf("Main pid: %d\n", getpid());
-    printf("Init watch dog\n");
 
     // 初始化看门狗进程
     bool ret = initWatchDog();
@@ -97,6 +96,8 @@ int main()
         printf("Init watch dog failed\n");
         return 1;
     }
+
+    printf("Init watch dog success...\n");
 
     // 运行子进程代码
     childProcessFunc(); 
