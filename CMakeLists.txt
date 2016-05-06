@@ -4,3 +4,4 @@ project(Samples)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/Daemon)
 add_subdirectory(${PROJECT_SOURCE_DIR}/BindCPU)
+add_subdirectory(${PROJECT_SOURCE_DIR}/WatchDog)
