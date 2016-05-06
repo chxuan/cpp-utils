@@ -12,10 +12,10 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void childProcessFunc()
 {
@@ -26,6 +26,7 @@ void childProcessFunc()
         printf("i: %d, pid: %d, ppid: %d\n", i, getpid(), getppid());
         if (i == 100)
         {
+            // 子进程主动结束
             exit(0);
         }
         sleep(1);
@@ -35,16 +36,26 @@ void childProcessFunc()
 void forkChildProcess(int)
 {
     int status = 0;
-    wait(&status);
+    // 等待子进程中断或终止，释放子进程资源
+    // 否则死掉的子进程会变成僵尸进程
+    int pid = wait(&status);
+    if (pid < 0)
+    {
+        printf("error: %s\n", strerror(errno));
+        return;
+    }
 
+    // 如果子进程是由于某种信号退出的，捕获该信号
     if (WIFSIGNALED(status))
     {
         int signalNum = WTERMSIG(status);
         printf("Signal num: %d\n", signalNum);
     }
 
+    // 等待3秒钟重新启动子进程
     sleep(3);
-    int pid = fork();
+
+    pid = fork();
     if (pid == 0)
     {
         printf("Fork new child process\n");
@@ -60,7 +71,9 @@ bool initWatchDog()
         // 父进程一直监视子进程的运行状态
         while (true)
         {
+            // 捕获子进程结束信号
             signal(SIGCHLD, forkChildProcess);
+            // 主进程挂起，当有信号来时被唤醒
             pause();
         }
     }
@@ -77,9 +90,11 @@ int main()
     printf("Main pid: %d\n", getpid());
     printf("Init watch dog\n");
 
+    // 初始化看门狗进程
     bool ret = initWatchDog();
     if (!ret)
     {
+        printf("Init watch dog failed\n");
         return 1;
     }
 
