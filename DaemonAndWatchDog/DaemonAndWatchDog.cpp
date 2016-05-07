@@ -18,11 +18,11 @@ void childProcessFunc()
     time_t t = 0;
     int i = 0;
 
-    // 每隔2秒向test.log报告运行状态
+    // 每隔5秒向test.log报告运行状态
     while (true)
     {
         ++i;
-        sleep(2);
+        sleep(5);
         file = fopen("./var/test.log", "a+");
         if (file != NULL)
         {
