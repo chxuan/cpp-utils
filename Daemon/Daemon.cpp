@@ -20,7 +20,6 @@ bool initDaemon()
     signal(SIGTTOU, SIG_IGN);// 后台程序尝试写操作
     signal(SIGTTIN, SIG_IGN);// 后台程序尝试读操作
     signal(SIGTERM, SIG_IGN);// 终止
-    signal(SIGCHLD, SIG_IGN);// 忽略子进程退出信号，防止僵尸进程产生
 
     // [1] 创建一个子进程，父进程退出
     int pid = fork();
