@@ -16,17 +16,25 @@ void childProcessFunc()
 {
     FILE* file = NULL;
     time_t t = 0;
+    int i = 0;
 
-    // 每隔10秒向test.log报告运行状态
+    // 每隔2秒向test.log报告运行状态
     while (true)
     {
-        sleep(10);
+        ++i;
+        sleep(2);
         file = fopen("./var/test.log", "a+");
         if (file != NULL)
         {
             t = time(NULL);
-            fprintf(file, "I am here at %s\n", asctime(localtime(&t)));
+            fprintf(file, "i: %d, I am here at %s\n", i, asctime(localtime(&t)));
             fclose(file);
+        }
+
+        if (i == 5)
+        {
+            // 子进程主动退出
+            exit(0);
         }
     }
 }
