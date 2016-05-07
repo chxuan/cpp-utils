@@ -87,7 +87,6 @@ bool initWatchDog()
 
 int main()
 {
-    signal(SIGCHLD, SIG_IGN);// 忽略子进程退出信号，防止僵尸进程产生
     printf("Main pid: %d\n", getpid());
 
     // 初始化看门狗进程
