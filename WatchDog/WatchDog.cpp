@@ -25,10 +25,12 @@ void childProcessFunc()
     {
         ++i;
         printf("i: %d, pid: %d, ppid: %d\n", i, getpid(), getppid());
-        if (i == 100)
+        if (i == 10)
         {
             // 子进程主动结束
-            exit(0);
+            //exit(0);
+            char* p = NULL;
+            *p = 1;
         }
         sleep(1);
     }
@@ -51,6 +53,12 @@ void forkChildProcess(int)
     {
         int signalNum = WTERMSIG(status);
         printf("Child process was killed by signal num: %d\n", signalNum);
+    }
+
+    // 检测是否生成了core文件
+    if (WCOREDUMP(status))
+    {
+        printf("Child process core dump file generated\n");
     }
 
     // 等待3秒钟重新启动子进程
