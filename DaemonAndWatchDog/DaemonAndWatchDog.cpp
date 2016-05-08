@@ -59,6 +59,12 @@ void forkChildProcess(int)
         printf("Child process was killed by signal num: %d\n", signalNum);
     }
 
+    // 检测是否生成了core文件
+    if (WCOREDUMP(status))
+    {
+        printf("Child process core dump file generated\n");
+    }
+
     // 等待3秒钟重新启动子进程
     sleep(3);
 
