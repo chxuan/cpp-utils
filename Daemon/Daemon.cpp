@@ -8,18 +8,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 
 bool initDaemon()
 {
     // 屏蔽一些有关控制终端操作的信号
     // 防止守护进程没有正常运转起来时，因控制终端受到干扰退出或挂起
-    signal(SIGINT, SIG_IGN); // 终端中断
-    signal(SIGHUP, SIG_IGN); // 连接挂断
-    signal(SIGQUIT, SIG_IGN);// 终端退出
-    signal(SIGPIPE, SIG_IGN);// 向无读进程的管道写数据
-    signal(SIGTTOU, SIG_IGN);// 后台程序尝试写操作
-    signal(SIGTTIN, SIG_IGN);// 后台程序尝试读操作
-    signal(SIGTERM, SIG_IGN);// 终止
+    assert(signal(SIGINT, SIG_IGN) != SIG_ERR); // 终端中断
+    assert(signal(SIGHUP, SIG_IGN) != SIG_ERR); // 连接挂断
+    assert(signal(SIGQUIT, SIG_IGN) != SIG_ERR);// 终端退出
+    assert(signal(SIGPIPE, SIG_IGN) != SIG_ERR);// 向无读进程的管道写数据
+    assert(signal(SIGTTOU, SIG_IGN) != SIG_ERR);// 后台程序尝试写操作
+    assert(signal(SIGTTIN, SIG_IGN) != SIG_ERR);// 后台程序尝试读操作
+    assert(signal(SIGTERM, SIG_IGN) != SIG_ERR);// 终止
 
     // [1] 创建一个子进程，父进程退出
     int pid = fork();
