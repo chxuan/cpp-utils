@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 void childProcessFunc()
 {
@@ -72,7 +73,7 @@ bool initWatchDog()
         while (true)
         {
             // 捕获子进程结束信号
-            signal(SIGCHLD, forkChildProcess);
+            assert(signal(SIGCHLD, forkChildProcess) != SIG_ERR);
             // 父进程挂起，当有信号来时被唤醒
             pause();
         }
