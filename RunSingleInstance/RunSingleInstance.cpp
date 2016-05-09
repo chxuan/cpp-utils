@@ -78,8 +78,9 @@ bool runSingleInstance()
     }
 
     // 锁定文件后，将该进程的pid写入文件
-    char buf[20] = {'\0'};
+    char buf[16] = {'\0'};
     sprintf(buf, "%d", getpid());
+    ftruncate(fd, 0);
     ret = write(fd, buf, strlen(buf));
     if (ret < 0)
     {
