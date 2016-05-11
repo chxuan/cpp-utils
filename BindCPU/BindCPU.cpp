@@ -5,14 +5,14 @@
 #include <sched.h>
 #include <stdio.h>
 
-unsigned int systemCpuNum()
+unsigned int systemCPUNum()
 {
     return sysconf(_SC_NPROCESSORS_CONF);
 }
 
 int main()
 {
-    unsigned int cpuNum = systemCpuNum();
+    unsigned int cpuNum = systemCPUNum();
     printf("Current system has %u CPU(s)\n", cpuNum);
 
     cpu_set_t cpuSet;
