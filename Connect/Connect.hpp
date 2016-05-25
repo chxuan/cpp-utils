@@ -40,8 +40,7 @@ public:
 
     void bind(const OnFunc& func)
     {
-        SlotPtr s(new Slot<Args...>(func));
-        m_slotVec.push_back(s);
+        m_slotVec.push_back(SlotPtr(new Slot<Args...>(func)));
     }
 
     void operator()(Args... args)

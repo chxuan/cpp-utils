@@ -1,3 +1,7 @@
+/************************************************
+ * 该例程讲解用C++11来实现Qt的信号槽机制
+ *
+************************************************/
 #include "Connect.hpp"
 #include <iostream>
 #include <string>
@@ -13,7 +17,7 @@ public:
     }
 
 signals:
-    Signal<> m_s1;
+    Signal<> m_s1;  // 不带参数的信号
     Signal<std::string> m_s2;
     Signal<int, std::string> m_s3;
 };
@@ -47,6 +51,7 @@ int main()
     A a;
     B b;
 
+    // 信号与槽绑定
     connect(&a, m_s1, std::bind(&B::func1, &b));
     connect(&a, m_s2, std::bind(&B::func2, &b, std::placeholders::_1));
     connect(&a, m_s2, std::bind(func, std::placeholders::_1));
