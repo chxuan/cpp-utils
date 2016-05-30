@@ -14,7 +14,7 @@ template<typename... Args>
 class Slot
 {
 public:
-    using OnFunc = std::function<void(Args...)>;
+    using OnFunc = std::function<void(Args&&...)>;
 
     Slot(const OnFunc& func)
         : m_func(func)
@@ -22,9 +22,9 @@ public:
         // Do nothing
     }
 
-    void exec(Args... args)
+    void exec(Args&&... args)
     {
-        m_func(args...);
+        m_func(std::forward<Args>(args)...);
     }
 
 private:
@@ -35,19 +35,19 @@ template<typename... Args>
 class Signal
 {
 public:
-    using SlotPtr = std::shared_ptr<Slot<Args...>>; 
-    using OnFunc = std::function<void(Args...)>;
+    using SlotPtr = std::shared_ptr<Slot<Args&&...>>; 
+    using OnFunc = std::function<void(Args&&...)>;
 
     void bind(const OnFunc& func)
     {
-        m_slotVec.push_back(SlotPtr(new Slot<Args...>(func)));
+        m_slotVec.push_back(SlotPtr(new Slot<Args&&...>(func)));
     }
 
-    void operator()(Args... args)
+    void operator()(Args&&... args)
     {
         for (auto& iter : m_slotVec)
         {
-            iter->exec(args...);
+            iter->exec(std::forward<Args>(args)...);
         }
     }
 
