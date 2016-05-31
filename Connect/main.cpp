@@ -58,8 +58,12 @@ int main()
     // 信号与槽绑定
     connect(&a, m_s1, std::bind(&B::func1, &b));
     connect(&a, m_s2, std::bind(&B::func2, &b, std::placeholders::_1));
-    connect(&a, m_s2, std::bind(func, std::placeholders::_1));
     connect(&a, m_s3, std::bind(&B::func3, &b, std::placeholders::_1, std::placeholders::_2));
+    connect(&a, m_s2, std::bind(func, std::placeholders::_1));
+    connect(&a, m_s2, [](const std::string& str)
+            {
+                std::cout << "lambda str: " << str << std::endl;
+            });
 
     a.start();
 
