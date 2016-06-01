@@ -3,6 +3,8 @@
 
 #include <dlfcn.h>
 #include <iostream>
+#include <exception>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <functional>
