@@ -18,7 +18,7 @@ int main()
     using OnFunc = int(*)(int, int);
     OnFunc func = nullptr;
 
-    func = (OnFunc)dlsym(handle, "add");
+    func = reinterpret_cast<OnFunc>(dlsym(handle, "add"));
     if (func == nullptr)
     {
         std::cout << "func is nullptr, error: " << dlerror() << std::endl;
@@ -26,7 +26,7 @@ int main()
     }
     std::cout << "a + b = " << func(a, b) << std::endl;
 
-    func = (OnFunc)dlsym(handle, "sub");
+    func = reinterpret_cast<OnFunc>(dlsym(handle, "sub"));
     if (func == nullptr)
     {
         std::cout << "func is nullptr, error: " << dlerror() << std::endl;
