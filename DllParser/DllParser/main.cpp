@@ -4,7 +4,7 @@
 
 int main()
 {
-    std::string dllFilePath = "./libcac.so";
+    std::string dllFilePath = "../Caculate/libcac.so";
     void* handle = dlopen(dllFilePath.c_str(), RTLD_NOW);
     if (handle == nullptr)
     {
