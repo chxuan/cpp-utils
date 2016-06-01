@@ -9,7 +9,7 @@ int main()
     if (handle == nullptr)
     {
         std::cout << "Open dll: " << dllFilePath << " failed, error: " << dlerror() << std::endl;
-        return -1;
+        return 1;
     }
 
     int a = 20;
@@ -38,7 +38,7 @@ int main()
     if (ret != 0)
     {
         std::cout << "Close dll: " << dllFilePath << " failed, error: " << dlerror() << std::endl;
-        return -1;
+        return 1;
     }
 
     return 0;
