@@ -4,7 +4,7 @@
 
 int main()
 {
-    std::string dllFilePath = "libcac.so";
+    std::string dllFilePath = "./libcac.so";
     void* handle = dlopen(dllFilePath.c_str(), RTLD_NOW);
     if (handle == nullptr)
     {
@@ -16,12 +16,22 @@ int main()
     int b = 10;
 
     using OnFunc = int(*)(int, int);
-    OnFunc func;
+    OnFunc func = nullptr;
 
     func = (OnFunc)dlsym(handle, "add");
+    if (func == nullptr)
+    {
+        std::cout << "func is nullptr, error: " << dlerror() << std::endl;
+        return 1;
+    }
     std::cout << "a + b = " << func(a, b) << std::endl;
 
     func = (OnFunc)dlsym(handle, "sub");
+    if (func == nullptr)
+    {
+        std::cout << "func is nullptr, error: " << dlerror() << std::endl;
+        return 1;
+    }
     std::cout << "a - b = " << func(a, b) << std::endl;
 
     int ret = dlclose(handle);
