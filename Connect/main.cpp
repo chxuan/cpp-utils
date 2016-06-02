@@ -5,6 +5,7 @@
  * 2.智能指针
  * 3.函数相关std::function、std::bind
  * 4.using关键字
+ * 5.完美转发std::forward
 ************************************************/
 #include "Connect.hpp"
 #include <iostream>
