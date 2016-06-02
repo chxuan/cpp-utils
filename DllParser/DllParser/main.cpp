@@ -6,6 +6,7 @@
  * 3.函数相关std::function
  * 4.using关键字
  * 5.判断函数的返回值类型std::result_of
+ * 6.完美转发:std::forward
 ************************************************/
 #include "DllParser.hpp"
 
@@ -37,6 +38,16 @@ int main()
     {
         auto subRet = dllParser->excecuteFunction<int(int, int)>("sub", a, b);
         std::cout << "a - b = " << subRet << std::endl;
+    }
+    catch (std::exception& e)
+    {
+        std::cout << "Exception: " << e.what() << std::endl;
+    }
+
+    std::string str = "Hello C++11";
+    try
+    {
+        dllParser->excecuteFunction<void(std::string)>("print", str);
     }
     catch (std::exception& e)
     {
