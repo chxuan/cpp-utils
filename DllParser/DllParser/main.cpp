@@ -6,7 +6,7 @@
  * 3.函数相关std::function
  * 4.using关键字
  * 5.判断函数的返回值类型std::result_of
- * 6.完美转发:std::forward
+ * 6.完美转发std::forward
 ************************************************/
 #include "DllParser.hpp"
 
