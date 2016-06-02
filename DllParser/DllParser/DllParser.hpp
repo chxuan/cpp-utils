@@ -62,7 +62,7 @@ public:
             }
 
             m_funcMap.insert(std::make_pair(funcName, addr));
-            iter = m_funcMap.find(funcName);
+            return std::function<T>(reinterpret_cast<T*>(addr));
         }
         
         return std::function<T>(reinterpret_cast<T*>(iter->second));
