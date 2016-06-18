@@ -40,7 +40,8 @@ public:
 
     void bind(const OnFunc& func)
     {
-        m_slotVec.push_back(SlotPtr(new Slot<Args&&...>(func)));
+        SlotPtr s = std::make_shared<Slot<Args&&...>>(func);
+        m_slotVec.emplace_back(s);
     }
 
     void operator()(Args&&... args)
