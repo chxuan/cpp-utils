@@ -61,7 +61,7 @@ public:
                 return nullptr;
             }
 
-            m_funcMap.insert(std::make_pair(funcName, addr));
+            m_funcMap.emplace(funcName, addr);
             return std::function<T>(reinterpret_cast<T*>(addr));
         }
         
