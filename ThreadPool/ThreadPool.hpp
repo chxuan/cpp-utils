@@ -14,12 +14,11 @@
 static const unsigned int MaxTaskQueueSize = 100000;
 static const unsigned int MaxNumOfThread = 30;
 
-using Task = std::function<void()>; 
-
 class ThreadPool
 {
 public:
     using WorkerThreadPtr = std::shared_ptr<std::thread>;
+    using Task = std::function<void()>; 
 
     explicit ThreadPool()
         : m_isStopThreadPool(false)
@@ -56,7 +55,7 @@ public:
                 m_taskPut.wait(locker);
             }
 
-            m_taskQueue.push(task);
+            m_taskQueue.emplace(task);
         }
 
         m_taskGet.notify_one();
@@ -104,7 +103,7 @@ private:
 
                 if (!m_taskQueue.empty())
                 {
-                    task = m_taskQueue.front();
+                    task = std::move(m_taskQueue.front());
                     m_taskQueue.pop();
                 }
             }
