@@ -29,7 +29,7 @@ public:
 
     ~ThreadPool()
     {
-        terminateAll();
+        stop();
     }
 
     void initThreadNum(unsigned int num)
@@ -37,7 +37,7 @@ public:
         assert(num > 0 && num <= MaxNumOfThread);
         for (unsigned int i = 0; i < num; ++i)
         {
-            WorkerThreadPtr t = std::make_shared<std::thread>(std::bind(&ThreadPool::run, this));
+            WorkerThreadPtr t = std::make_shared<std::thread>(std::bind(&ThreadPool::runTask, this));
             m_threadVec.emplace_back(t);
         }
     }
@@ -62,6 +62,15 @@ public:
         m_taskGet.notify_one();
     }
 
+    void stop()
+    {
+        std::call_once(m_callFlag, [this]
+        {
+            terminateAll();
+        });
+    }
+
+private:
     void terminateAll()
     {
         m_isStopThreadPool = true;
@@ -79,8 +88,7 @@ public:
         cleanTaskQueue();
     }
 
-private:
-    void run()
+    void runTask()
     {
         while (true)
         {
@@ -128,6 +136,7 @@ private:
     std::mutex m_taskQueueMutex;
     std::queue<Task> m_taskQueue;
     std::atomic<bool> m_isStopThreadPool;
+    std::once_flag m_callFlag;
 };
 
 #endif
