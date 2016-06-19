@@ -86,6 +86,4 @@ private:
     std::unordered_map<std::string, void*> m_funcMap;
 };
 
-using DllParserPtr = std::shared_ptr<DllParser>;
-
 #endif

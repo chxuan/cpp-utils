@@ -14,8 +14,9 @@ int main()
 {
     std::string dllFilePath = "../Caculate/libcac.so";
 
-    DllParserPtr dllParser(new DllParser);
-    bool ret = dllParser->load(dllFilePath);
+    /* DllParserPtr dllParser(new DllParser); */
+    DllParser parser;
+    bool ret = parser.load(dllFilePath);
     if (!ret)
     {
         return 1;
@@ -26,7 +27,7 @@ int main()
 
     try
     {
-        auto addRet = dllParser->excecuteFunction<int(int, int)>("add", a, b);
+        auto addRet = parser.excecuteFunction<int(int, int)>("add", a, b);
         std::cout << "a + b = " << addRet << std::endl;
     }
     catch (std::exception& e)
@@ -36,7 +37,7 @@ int main()
 
     try
     {
-        auto subRet = dllParser->excecuteFunction<int(int, int)>("sub", a, b);
+        auto subRet = parser.excecuteFunction<int(int, int)>("sub", a, b);
         std::cout << "a - b = " << subRet << std::endl;
     }
     catch (std::exception& e)
@@ -47,7 +48,7 @@ int main()
     std::string str = "Hello C++11";
     try
     {
-        dllParser->excecuteFunction<void(std::string)>("print", str);
+        parser.excecuteFunction<void(std::string)>("print", str);
     }
     catch (std::exception& e)
     {
