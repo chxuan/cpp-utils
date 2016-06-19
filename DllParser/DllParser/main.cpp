@@ -14,7 +14,6 @@ int main()
 {
     std::string dllFilePath = "../Caculate/libcac.so";
 
-    /* DllParserPtr dllParser(new DllParser); */
     DllParser parser;
     bool ret = parser.load(dllFilePath);
     if (!ret)
