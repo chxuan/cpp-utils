@@ -69,7 +69,6 @@ static std::string base64_encode(const char *in, int len)
 	return encoded;
 }
 
-
 static std::string base64_decode(const std::string& in)
 {
 	std::string decoded;
@@ -87,34 +86,34 @@ static std::string base64_decode(const std::string& in)
 		x = (*pi++);
 
 		if (x > 127 || (x = un_b64_tab[x]) == 255)
-			return{};
+			return "";
 		if (pi == pend)
-			return{};
+			return "";
 		y = (*pi++);
 		if ((y = un_b64_tab[y]) == 255)
-			return{};
+			return "";
 		*pd++ = (x << 2) | (y >> 4);
 
 		if (pi != pend && ((x = (*pi++)) == '='))
 		{
 			if ((pi != pend && *pi++ != '=') || pi != pend)
-				return{};
+				return "";
 		}
 		else
 		{
 			if (x > 127 || (x = un_b64_tab[x]) == 255)
-				return{};
+				return "";
 			*pd++ = (y << 4) | (x >> 2);
 
 			if (pi != pend && ((y = (*pi++)) == '='))
 			{
 				if (pi != pend)
-					return{};
+					return "";
 			}
 			else
 			{
 				if (y > 127 || (y = un_b64_tab[y]) == 255)
-					return{};
+					return "";
 				*pd++ = (x << 6) | y;
 			}
 		}
