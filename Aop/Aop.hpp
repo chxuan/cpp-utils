@@ -73,7 +73,8 @@ private:
     Function m_func = nullptr; // 被织入的函数
 };
 
-template<typename T> using identity_t = T;
+template<typename T> 
+using identity_t = T;
 
 // AOP的辅助函数，简化调用
 template<typename... AOP, typename Function, typename... Args>
