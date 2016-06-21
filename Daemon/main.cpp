@@ -5,8 +5,8 @@
 
 int main()
 {
-    // 初始化守护进程
-    bool ret = Daemon::init();
+    // 启动守护进程
+    bool ret = Daemon::start();
     if (!ret)
     {
         printf("Init daemon failed\n");
