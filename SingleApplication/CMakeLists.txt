@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(RunSingleInstance)
+project(SingleApplication)
 
-set(OUTPUTNAME RunSingleInstance)
+set(OUTPUTNAME SingleApplication)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g -O2 -std=c++11")
 
 aux_source_directory(. DIR_SRCS)
