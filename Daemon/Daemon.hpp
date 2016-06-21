@@ -13,7 +13,7 @@
 class Daemon
 {
 public:
-    static bool initDaemon()
+    static bool init()
     {
         // 屏蔽一些有关控制终端操作的信号
         // 防止守护进程没有正常运转起来时，因控制终端受到干扰退出或挂起

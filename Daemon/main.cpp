@@ -6,7 +6,7 @@
 int main()
 {
     // 初始化守护进程
-    bool ret = Daemon::initDaemon();
+    bool ret = Daemon::init();
     if (!ret)
     {
         printf("Init daemon failed\n");
