@@ -1,8 +1,10 @@
 /************************************************
  *该例程讲解用C++11实现AOP框架
 ************************************************/
+#include <unistd.h>
 #include <iostream>
 #include "Aop.hpp"
+#include "AopTimer.hpp"
 
 class A
 {
@@ -37,8 +39,14 @@ void coreFunc(int n)
     std::cout << "invoke coreFunc: " << n << std::endl;
 }
 
+void coreFunc2()
+{
+    usleep(2000 * 1000); 
+}
+
 int main()
 {
     aopInvoke<A, B>(&coreFunc, 100);
+    aopInvoke<AopTimer>(&coreFunc2);
     return 0;
 }
