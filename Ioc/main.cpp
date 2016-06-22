@@ -33,8 +33,16 @@ public:
 int main()
 {
     IocContainer<ICar> ioc;
-    ioc.registerType<Bus>("bus");
-    ioc.registerType<Car>("car");
+
+    try
+    {
+        ioc.registerType<Bus>("bus");
+        ioc.registerType<Car>("car");
+    }
+    catch (std::exception& e)
+    {
+        std::cout << "Exception: " << e.what() << std::endl; 
+    }
 
     std::shared_ptr<ICar> bus = ioc.resolveShared("bus");
     bus->test();
