@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <signal.h>
 #include <functional>
 #include <unordered_map>
@@ -17,6 +18,6 @@ public:
     static void signal(int sig, const std::function<void()>& func)
     {
         signalMap.emplace(sig, func);
-        ::signal(sig, handleSignal);
+        assert(::signal(sig, handleSignal) != SIG_ERR);
     }
 };
