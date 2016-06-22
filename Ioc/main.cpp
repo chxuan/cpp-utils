@@ -42,6 +42,7 @@ int main()
     catch (std::exception& e)
     {
         std::cout << "Exception: " << e.what() << std::endl; 
+        return 1;
     }
 
     std::shared_ptr<ICar> bus = ioc.resolveShared("bus");
