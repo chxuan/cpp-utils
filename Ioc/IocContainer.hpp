@@ -24,7 +24,7 @@ public:
     }
 
 private:
-    void registerType(const std::string& key, std::function<T*()> func)
+    void registerType(const std::string& key, const std::function<T*()>& func)
     {
         auto iter = m_funcMap.find(key);
         if (iter != m_funcMap.end())
