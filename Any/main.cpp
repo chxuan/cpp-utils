@@ -1,15 +1,25 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include "Any.hpp"
 
 int main()
 {
     Any n;
-    auto r = n.isNull();
-    std::cout << "r: " << r << std::endl;
-    /* std::string str = "Hello"; */
-    /* n = str; */
+    std::cout << n.isNull() << std::endl;
+    std::string str = "Hello";
+    n = str;
+
+    try
+    {
+        n.anyCast<int>();
+    }
+    catch (std::exception& e)
+    {
+        std::cout << "Exception: " << e.what() << std::endl;
+    }
+
+    Any n1 = 1;
+    std::cout << n1.is<int>() << std::endl;
 
     return 0;
 }
