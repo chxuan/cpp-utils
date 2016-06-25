@@ -6,13 +6,12 @@
 
 // 转换为std::function和函数指针 
 template<typename T>
-class FunctionTraits;
+struct FunctionTraits;
 
 // 普通函数
 template<typename Ret, typename... Args>
-class FunctionTraits<Ret(Args...)>
+struct FunctionTraits<Ret(Args...)>
 {
-public:
 	enum 
     {
         Arity = sizeof...(Args) 
@@ -28,9 +27,8 @@ public:
     using argType = typename std::tuple_element<N, std::tuple<Args...>>::type;
 #else
 	template<std::size_t N>
-	class args
+	struct args
 	{
-    public:
 		static_assert(N < Arity, "Index is out of range, index must less than sizeof Args");
 		using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
 	};
@@ -39,16 +37,16 @@ public:
 
 // 函数指针
 template<typename Ret, typename... Args>
-class FunctionTraits<Ret(*)(Args...)> : public FunctionTraits<Ret(Args...)>{};
+struct FunctionTraits<Ret(*)(Args...)> : public FunctionTraits<Ret(Args...)>{};
 
 // std::function
 template <typename Ret, typename... Args>
-class FunctionTraits<std::function<Ret(Args...)>> : public FunctionTraits<Ret(Args...)>{};
+struct FunctionTraits<std::function<Ret(Args...)>> : public FunctionTraits<Ret(Args...)>{};
 
 // 成员函数
 #define MEMBER_FUNTION_TRAITS(...) \
 template <typename ReturnType, typename ClassType, typename... Args> \
-class FunctionTraits<ReturnType(ClassType::*)(Args...) __VA_ARGS__> : public FunctionTraits<ReturnType(Args...)>{}; \
+struct FunctionTraits<ReturnType(ClassType::*)(Args...) __VA_ARGS__> : public FunctionTraits<ReturnType(Args...)>{}; \
 
 MEMBER_FUNTION_TRAITS()
 MEMBER_FUNTION_TRAITS(const)
@@ -57,7 +55,7 @@ MEMBER_FUNTION_TRAITS(const volatile)
 
 // 函数对象
 template<typename Callable>
-class FunctionTraits : public FunctionTraits<decltype(&Callable::operator())>{};
+struct FunctionTraits : public FunctionTraits<decltype(&Callable::operator())>{};
 
 template <typename Function>
 typename FunctionTraits<Function>::stlFunctionType toFunction(const Function& lambda)
