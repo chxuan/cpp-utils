@@ -20,11 +20,7 @@ public:
     using WorkerThreadPtr = std::shared_ptr<std::thread>;
     using Task = std::function<void()>; 
 
-    explicit ThreadPool()
-        : m_isStopThreadPool(false)
-    {
-        // Do nothing
-    }
+    explicit ThreadPool() : m_isStopThreadPool(false) {}
 
     ~ThreadPool()
     {
