@@ -12,9 +12,9 @@ public:
     Any(Any& other) : m_basePtr(other.clone()), m_typeIndex(other.m_typeIndex) {}
     Any(Any&& other) : m_basePtr(std::move(other.m_basePtr)), m_typeIndex(other.m_typeIndex) {}
 
+    // 创建智能指针时，对于一般的类型，通过std::decay来移除引用和cv符，从而获得原始类型
     template<typename U, class = typename std::enable_if<!std::is_same<typename std::decay<U>::type, Any>::value, U>::type>
-    Any(U&& value)
-        : m_basePtr(new Derived<typename std::decay<U>::type>(std::forward<U>(value))),
+    Any(U&& value) : m_basePtr(new Derived<typename std::decay<U>::type>(std::forward<U>(value))),
         m_typeIndex(std::type_index(typeid(typename std::decay<U>::type))) {}
 
     bool isNull() const
@@ -28,6 +28,7 @@ public:
         return m_typeIndex == std::type_index(typeid(U));
     }
 
+    // 将Any转换为实际的类型
     template<typename U>
     U& anyCast()
     {
