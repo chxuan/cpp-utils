@@ -17,17 +17,24 @@ public:
     {
         Arity = sizeof...(Args) 
     };
-	typedef Ret FunctionType(Args...);
-	typedef Ret ReturnType;
-	using StlFunctionType = std::function<FunctionType>;
-    using Pointer = Ret(*)(Args...);
 
-	template<size_t I>
+	typedef Ret functionType(Args...);
+    using returnType = Ret;
+	using stlFunctionType = std::function<functionType>;
+    using pointer = Ret(*)(Args...);
+
+#if 0
+    template<std::size_t N>
+    using argType = typename std::tuple_element<N, std::tuple<Args...>>::type;
+#else
+	template<std::size_t N>
 	class args
 	{
-		static_assert(I < Arity, "Index is out of range, index must less than sizeof Args");
-		using type = typename std::tuple_element<I, std::tuple<Args...>>::type;
+    public:
+		static_assert(N < Arity, "Index is out of range, index must less than sizeof Args");
+		using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
 	};
+#endif
 };
 
 // 函数指针
@@ -53,21 +60,21 @@ template<typename Callable>
 class FunctionTraits : public FunctionTraits<decltype(&Callable::operator())>{};
 
 template <typename Function>
-typename FunctionTraits<Function>::StlFunctionType toFunction(const Function& lambda)
+typename FunctionTraits<Function>::stlFunctionType toFunction(const Function& lambda)
 {
-	return static_cast<typename FunctionTraits<Function>::StlFunctionType>(lambda);
+	return static_cast<typename FunctionTraits<Function>::stlFunctionType>(lambda);
 }
 
 template <typename Function>
-typename FunctionTraits<Function>::StlFunctionType toFunction(Function&& lambda)
+typename FunctionTraits<Function>::stlFunctionType toFunction(Function&& lambda)
 {
-	return static_cast<typename FunctionTraits<Function>::StlFunctionType>(std::forward<Function>(lambda));
+	return static_cast<typename FunctionTraits<Function>::stlFunctionType>(std::forward<Function>(lambda));
 }
 
 template <typename Function>
-typename FunctionTraits<Function>::Pointer toFunctionPointer(const Function& lambda)
+typename FunctionTraits<Function>::pointer toFunctionPointer(const Function& lambda)
 {
-	return static_cast<typename FunctionTraits<Function>::Pointer>(lambda);
+	return static_cast<typename FunctionTraits<Function>::pointer>(lambda);
 }
 
 #endif
