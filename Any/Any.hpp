@@ -8,33 +8,14 @@
 class Any
 {
 public:
-    Any()
-        : m_typeIndex(std::type_index(typeid(void)))
-    {
-        // Do nothing
-    }
-
-    Any(Any& other)
-        : m_basePtr(other.clone()),
-        m_typeIndex(other.m_typeIndex)
-    {
-        // Do nothing
-    }
-
-    Any(Any&& other)
-        : m_basePtr(std::move(other.m_basePtr)),
-        m_typeIndex(other.m_typeIndex)
-    {
-        // Do nothing
-    }
+    Any() : m_typeIndex(std::type_index(typeid(void))) {}
+    Any(Any& other) : m_basePtr(other.clone()), m_typeIndex(other.m_typeIndex) {}
+    Any(Any&& other) : m_basePtr(std::move(other.m_basePtr)), m_typeIndex(other.m_typeIndex) {}
 
     template<typename U, class = typename std::enable_if<!std::is_same<typename std::decay<U>::type, Any>::value, U>::type>
     Any(U&& value)
         : m_basePtr(new Derived<typename std::decay<U>::type>(std::forward<U>(value))),
-        m_typeIndex(std::type_index(typeid(typename std::decay<U>::type)))
-    {
-        // Do nothing
-    }
+        m_typeIndex(std::type_index(typeid(typename std::decay<U>::type))) {}
 
     bool isNull() const
     {
@@ -79,11 +60,7 @@ private:
     class Base
     {
     public:
-        virtual ~Base()
-        {
-            // Do nothing
-        }
-
+        virtual ~Base() {}
         virtual BasePtr clone() const = 0;
     };
 
@@ -92,11 +69,7 @@ private:
     {
     public:
         template<typename U>
-        Derived(U&& value)
-            : m_value(std::forward<U>(value))
-        {
-            // Do nothing
-        }
+        Derived(U&& value) : m_value(std::forward<U>(value)) {}
 
         virtual BasePtr clone() const override
         {
