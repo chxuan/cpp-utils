@@ -27,6 +27,8 @@ int main()
     printType<FunctionTraits<std::function<int(int)>>::functionType>();
     printType<FunctionTraits<std::function<int(int)>>::args<0>::type>();
     printType<FunctionTraits<std::function<int(int)>>::returnType>();
+    std::cout << "count: " << FunctionTraits<std::function<int(int)>>::arity << std::endl;
+    
     printType<FunctionTraits<decltype(f)>::functionType>();
     printType<FunctionTraits<decltype(func)>::functionType>();
     printType<FunctionTraits<decltype(func2)>::functionType>();
