@@ -16,11 +16,7 @@ class Slot
 public:
     using OnFunc = std::function<void(Args&&...)>;
 
-    Slot(const OnFunc& func)
-        : m_func(func)
-    {
-        // Do nothing
-    }
+    Slot(const OnFunc& func) : m_func(func) {}
 
     void exec(Args&&... args)
     {
