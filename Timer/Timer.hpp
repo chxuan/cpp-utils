@@ -6,11 +6,7 @@
 class Timer
 {
 public:
-    Timer()
-        : m_begin(std::chrono::high_resolution_clock::now())
-    {
-        // Do nothing
-    }
+    Timer() : m_begin(std::chrono::high_resolution_clock::now()) {}
 
     void reset()
     {
