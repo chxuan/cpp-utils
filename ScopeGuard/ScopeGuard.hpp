@@ -11,17 +11,8 @@ public:
     ScopeGuard(const ScopeGuard&) = delete;
     ScopeGuard& operator=(const ScopeGuard&) = delete;
 
-    explicit ScopeGuard(T&& func)
-        : m_func(std::move(func))
-    {
-        // Do nothing
-    }
-
-    explicit ScopeGuard(const T& func)
-        : m_func(func)
-    {
-        // Do nothing
-    }
+    explicit ScopeGuard(T&& func) : m_func(std::move(func)) {}
+    explicit ScopeGuard(const T& func) : m_func(func) {}
 
     ~ScopeGuard()
     {
