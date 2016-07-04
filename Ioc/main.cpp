@@ -30,8 +30,24 @@ public:
     }
 };
 
+struct A
+{
+    void func()
+    {
+        std::cout << "A::func()" << std::endl;
+    }
+};
+
+struct B
+{
+    void func()
+    {
+        std::cout << "B::func()" << std::endl;
+    }
+};
 int main()
 {
+#if 0
     IocContainer<ICar> ioc;
 
     try
@@ -49,6 +65,14 @@ int main()
     bus->test();
     std::shared_ptr<ICar> car = ioc.resolveShared("car");
     car->test();
+#endif
+    IocContainer ioc;
+    ioc.registerSimple<A>("a");
+    ioc.registerSimple<B>("b");
+    auto a = ioc.resolveShared<A>("a");
+    a->func();
+    auto b = ioc.resolveShared<B>("b");
+    b->func();
 
     return 0;
 }
