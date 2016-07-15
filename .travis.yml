@@ -1,0 +1,17 @@
+language: cpp
+
+compiler:
+        - gcc
+
+before_install:
+        - sudo add-apt-repository -y ppa:andykimpe/cmake
+        - sudo add-apt-repository -y ppa:boost-latest/ppa
+        - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        - sudo apt-get -qq update
+
+install:
+        - sudo apt-get install cmake 
+
+script: 
+        - cmake .
+        - make
