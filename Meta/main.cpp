@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <typeinfo>
 #include "Meta.hpp"
 
 struct Person
@@ -14,7 +15,7 @@ template<typename T>
 void func(T& t)
 {
     auto ret = t.meta();
-    std::cout << "Hello world" << std::endl;
+    std::cout << typeid(ret).name() << std::endl;
 }
 
 int main()
