@@ -21,3 +21,7 @@ install:
 script: 
         - cmake .
         - make
+
+after_success:
+        - sudo pip install cpp-coveralls
+        - coveralls -r . -e CMakeFiles -e . --gcov-options '\-lp'
