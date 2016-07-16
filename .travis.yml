@@ -24,4 +24,4 @@ script:
 
 after_success:
         - sudo pip install cpp-coveralls
-        - coveralls -r . -e CMakeFiles -e . --gcov-options '\-lp'
+        - coveralls -r . -e CMakeFiles --gcov-options '\-lp'
