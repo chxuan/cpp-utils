@@ -15,5 +15,8 @@ int main()
 
     auto ret = from(vec).select([](int i){ return i + 2; }).where([](int i){ return i > 2; }).max();
     std::cout << "max: " << ret << std::endl;
+
+    auto ret2 = from(vec).sum();
+    std::cout << "sum: " << ret2 << std::endl;
     return 0;
 }

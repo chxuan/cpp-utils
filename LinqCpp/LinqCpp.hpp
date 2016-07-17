@@ -67,6 +67,53 @@ public:
         return *std::max_element(begin(), end());
     }
 
+    template<typename F>
+    auto max(const F& f) const->valueType
+    {
+        return *std::max_element(begin(), end(), f);
+    }
+
+    auto min() const->valueType
+    {
+        return *std::min_element(begin(), end());
+    }
+
+    template<typename F>
+    auto min(const F& f) const->valueType
+    {
+        return *min_element(begin(), end(), f);
+    }
+
+    // 累加器，对每一个元素进行一个运算
+    template<typename F>
+    auto aggregate(const F& f) const->valueType
+    {
+        auto iter = begin();
+        auto value = *iter++;
+        return std::accumulate(iter, end(), std::move(value), f);
+    }
+
+    auto sum() const->valueType
+    {
+        return aggregate(std::plus<valueType>());
+    }
+
+    auto count() const->decltype(std::distance(begin(), end()))
+    {
+        return std::distance(begin(), end());
+    }
+
+    template<typename F>
+    auto count(const F& f) const->decltype(std::count_if(begin(), end(), f))
+    {
+        return std::count_if(begin(), end(), f);
+    }
+
+    auto average()->valueType
+    {
+        return sum() / count();
+    }
+
 private:
     R m_linqRange;
 };
