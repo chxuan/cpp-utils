@@ -32,6 +32,7 @@ typename FunctionTraits<Function>::function toFunction(const Function& lambda)
 template<typename R>
 class LinqCpp
 {
+    R m_linqRange;
 public:
     using valueType = typename R::value_type;
     LinqCpp(R range) : m_linqRange(range) {}
@@ -183,8 +184,65 @@ public:
         return std::all_of(begin(), end(), f);
     }
 
-private:
-    R m_linqRange;
+    // 将map中的键放到一个range中.
+    auto keys() const->LinqCpp<boost::select_first_range<R>>
+    {
+        return LinqCpp<boost::select_first_range<R>>(boost::adaptors::keys(m_linqRange));
+    }
+
+    // 将map中的值放到一个range中.
+    auto values() const->LinqCpp<boost::select_second_const_range<R>>
+    {
+        return LinqCpp<boost::select_second_const_range<R>>(boost::adaptors::values(m_linqRange));
+    }
+
+    // 获取指定索引位置的元素.
+    template<typename T>
+    auto elementAt(T index) const->valueType
+    {
+        return *std::next(begin(), index);
+    }
+
+    // 获取前面的n个元素
+    template<typename T>
+    auto take(T n) const->LinqCpp<decltype(boost::adaptors::slice(m_linqRange, 0, n))>
+    {
+        return LinqCpp(boost::adaptors::slice(m_linqRange, 0, n));
+    }
+
+    // 获取指定范围内的元素.
+    template<typename T>
+    auto take(T start, T end) const->LinqCpp<decltype(boost::adaptors::slice(m_linqRange, start, end))>
+    {
+        return LinqCpp(boost::adaptors::slice(m_linqRange, start, end));
+    }
+
+    // 当条件不满足时返回前面所有的元素.
+    template<typename F>
+    auto takewhile(const F& f) const->LinqCpp<decltype(boost::make_iterator_range(begin(), std::find_if(begin(), end(), f)))>
+    {
+        return LinqCpp(boost::make_iterator_range(begin(), std::find_if(begin(), end(), f)));
+    }
+    
+    // 获取第n个元素之后的所有元素.
+    template<typename T>
+    auto skip(T n) const->LinqCpp<decltype(boost::make_iterator_range(begin() + n, end()))>
+    {
+        return LinqCpp(boost::make_iterator_range(begin() + n, end()));
+    }
+
+    // 当条件不满足时，获取后面所有的元素.
+    template<typename F>
+    auto skipwhile(const F& f) const->LinqCpp<decltype(boost::make_iterator_range(std::find_if_not(begin(), end(), f), end()))>
+    {
+        return LinqCpp(boost::make_iterator_range(std::find_if_not(begin(), end(), f), end()));
+    }
+
+    // 将range转换为vector.
+    std::vector<valueType> toVector()
+    {
+        return std::vector<valueType>(begin(), end());
+    }
 };
 
 };

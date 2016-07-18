@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include "LinqCpp.hpp"
 
 int main()
@@ -55,6 +56,39 @@ int main()
     {
         std::cout << "All the elements are even numbers." << std::endl;
     }
+
+    auto atRet = from(vec).elementAt(1);
+    std::cout << "elementAt: " << atRet << std::endl;
+
+    std::map<int, std::string> m;
+    m.emplace(1, "Hello");
+    m.emplace(2, "world");
+    std::cout << "map keys: ";
+    from(m).keys().foreach([](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+    std::cout << "map values: ";
+    from(m).values().foreach([](const std::string& value){ std::cout << value << " "; });
+    std::cout << std::endl;
+
+    std::cout << "take: ";
+    from(vec).take(3).foreach([](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+
+    std::cout << "take: ";
+    from(vec).take(0, 3).foreach([](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+
+    std::cout << "takewhile: ";
+    from(vec).takewhile([](int a){ return a > 2; }).foreach([](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+
+    std::cout << "skip: ";
+    from(vec).skip(2).foreach([](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
     
+    std::cout << "skipwhile: ";
+    from(vec).skipwhile([](int i){ return i < 2; }).foreach([](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+
     return 0;
 }
