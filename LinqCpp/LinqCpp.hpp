@@ -62,6 +62,29 @@ public:
         return std::end(m_linqRange);
     }
 
+    // 翻转操作.
+    auto reverse()->LinqCpp<boost::reversed_range<R>>
+    {
+        return LinqCpp<boost::reversed_range<R>>(boost::adaptors::reverse(m_linqRange));
+    }
+
+    template<typename F>
+    auto first(const F& f)->valueType
+    {
+        return *std::find_if(begin(), end(), f);
+    }
+
+    template<typename F>
+    auto last(const F& f)->valueType
+    {
+        return reverse().first(f); 
+    }
+
+    bool empty() const
+    {
+        return begin() == end();
+    }
+
     auto max() const->valueType
     {
         return *std::max_element(begin(), end());
@@ -84,7 +107,18 @@ public:
         return *min_element(begin(), end(), f);
     }
 
-    // 累加器，对每一个元素进行一个运算
+    auto minmax() const->decltype(std::minmax_element(begin(), end()))
+    {
+        return std::minmax_element(begin(), end());
+    }
+
+    template<typename F>
+    auto minmax(const F& f) const->decltype(std::minmax_element(begin(), end(), f))
+    {
+        return std::minmax_element(begin(), end(), f);
+    }
+
+    // 累加器，对每一个元素进行一个运算.
     template<typename F>
     auto aggregate(const F& f) const->valueType
     {
@@ -103,15 +137,50 @@ public:
         return std::distance(begin(), end());
     }
 
+    // 根据function求count.
     template<typename F>
     auto count(const F& f) const->decltype(std::count_if(begin(), end(), f))
     {
         return std::count_if(begin(), end(), f);
     }
 
-    auto average()->valueType
+    auto average() const->valueType
     {
         return sum() / count();
+    }
+
+    // 简单去重.
+    auto distinct()->LinqCpp<boost::range_detail::uniqued_range<R>>
+    {
+        return LinqCpp<boost::range_detail::uniqued_range<R>>(m_linqRange | boost::adaptors::uniqued);
+    }
+
+    // 根据判断式判断是否包含.
+    template<typename F>
+    auto contains(const F& f) const->bool
+    {
+        return std::find_if(begin(), end(), f) != end();
+    }
+
+    // 遍历操作.
+    template<typename F>
+    void foreach(const F& f) const
+    {
+        std::for_each(begin(), end(), f); 
+    }
+
+    // 存在满足条件的就返回true.
+    template<typename F>
+    auto any(const F& f) const->bool
+    {
+        return std::any_of(begin(), end(), f);
+    }
+
+    // 满足全部条件的就返回true.
+    template<typename F>
+    auto all(const F& f) const->bool
+    {
+        return std::all_of(begin(), end(), f);
     }
 
 private:
