@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 #include "LinqCpp.hpp"
 
 int main()
@@ -29,7 +30,8 @@ int main()
     auto aveRet = from(vec).average();
     std::cout << "average: " << aveRet << std::endl;
 
-    std::vector<int> vec2 { 1, 1, 2, 2, 3 };
+    std::vector<int> vec2 { 1, 1, 2, 2, 3, 2 };
+    std::sort(vec2.begin(), vec2.end());// sort first
     std::cout << "distinct: ";
     from(vec2).distinct().foreach([](int i){ std::cout << i << " "; });
     std::cout << std::endl;
