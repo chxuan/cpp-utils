@@ -359,4 +359,13 @@ linqcpp::LinqCpp<iteratorRange<R>> from(const R& range)
     return linqcpp::LinqCpp<iteratorRange<R>>(iteratorRange<R>(range));
 }
 
+// 合并range.
+template<typename... Args>
+auto zip(const Args&... args)->boost::iterator_range<boost::zip_iterator<decltype(boost::make_tuple(std::begin(args)...))>>
+{
+    auto begin = boost::make_zip_iterator(boost::make_tuple(std::begin(args)...));
+    auto end = boost::make_zip_iterator(boost::make_tuple(std::end(args)...));
+    return boost::make_iterator_range(begin, end);
+}
+
 #endif
