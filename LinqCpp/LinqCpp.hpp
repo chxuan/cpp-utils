@@ -3,6 +3,8 @@
 
 #include <type_traits>
 #include <numeric>
+#include <vector>
+#include <map>
 #include <boost/algorithm/minmax_element.hpp>
 #include <boost/iterator/zip_iterator.hpp>
 #include <boost/range.hpp>
@@ -242,6 +244,102 @@ public:
     std::vector<valueType> toVector()
     {
         return std::vector<valueType>(begin(), end());
+    }
+
+    // 按步长挑选元素组成新集合.
+    template<typename T>
+    auto step(T n)->decltype(boost::adaptors::stride(m_linqRange, n))
+    {
+        return boost::adaptors::stride(m_linqRange, n);
+    }
+
+    // 直接将指针或者智能指针指向的内容组成新集合.
+    auto indirect()->LinqCpp<boost::indirected_range<R>>
+    {
+        return LinqCpp<boost::indirected_range<R>>(boost::adaptors::indirect(m_linqRange));
+    }
+
+    // 连接操作.
+    template<typename R2>
+    auto concat(const R2& other)->LinqCpp<boost::joined_range<R, const R2>>
+    {
+        return LinqCpp<boost::joined_range<R, const R2>>(boost::join(m_linqRange, other));
+    }
+
+    // 排除操作.
+    template<typename R2>
+    void except(const R2& other, std::vector<valueType>& out)
+    {
+        std::set_difference(begin(), end(), std::begin(other), std::end(other), std::back_inserter(out));
+    }
+
+    // 包含操作.
+    template<typename R2>
+    bool includes(const R2& other) const
+    {
+        return std::includes(begin(), end(), std::begin(other), std::end(other));
+    }
+
+    // 带函数判断的包含操作.
+    template<typename R2, typename F>
+    bool includes(const R2& other, const F& f) const
+    {
+        return std::includes(begin(), end(), std::begin(other), std::end(other), f);
+    }
+
+    // 分组操作.
+    template<typename Fn>
+    std::multimap<typename std::result_of<Fn(valueType)>::type, valueType> groupby(const Fn& f)
+    {
+        using keyType = decltype(std::declval<Fn>()(std::declval<valueType>()));
+        std::multimap<keyType, valueType> m;
+        std::for_each(begin(), end(), [&m, &f](valueType item)
+        {
+            m.insert(std::make_pair(f(item), item)); 
+        });
+        return m;
+    }
+
+    // 允许指定键和值函数的分组操作.
+    template<typename KeyFn, typename ValueFn>
+    std::multimap<typename std::result_of<KeyFn(valueType)>::type, typename std::result_of<ValueFn(valueType)>::type>
+    groupby(const KeyFn& kfn, const ValueFn& vfn)
+    {
+        using keyType = decltype(std::declval<KeyFn>()(std::declval<valueType>()));
+        using valType = decltype(std::declval<ValueFn>()(std::declval<valueType>()));
+        std::multimap<keyType, valType> m;
+        std::for_each(begin(), end(), [&m, &kfn, &vfn](valueType item)
+        { 
+            m.insert(std::make_pair(kfn(item), vfn(item)));
+        });
+        return m;
+    }
+
+    // 转换操作.
+    template<typename T>
+    auto cast()->LinqCpp<boost::transformed_range<std::function<T(valueType)>, R>>
+    {
+        std::function<T(valueType)> f = [](valueType item){ return static_cast<T>(item); };
+        return LinqCpp<boost::transformed_range<std::function<T(valueType)>, R>>(select(f));
+    }
+    
+    // 判断操作.
+    template<typename R2>
+    bool equals(const LinqCpp<R2>& other) const
+    {
+        return count() == other.count() && std::equal(begin(), end(), other.begin());
+    }
+
+    template<typename R2>
+    bool operator==(const LinqCpp<R2>& other) const
+    {
+        return equals(other);
+    }
+
+    template<typename R2>
+    bool operator!=(const LinqCpp<R2>& other) const
+    {
+        return !equals(other);
     }
 };
 

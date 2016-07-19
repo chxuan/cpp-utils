@@ -90,5 +90,40 @@ int main()
     from(vec).skipwhile([](int i){ return i < 2; }).foreach([](int i){ std::cout << i << " "; });
     std::cout << std::endl;
 
+    std::cout << "step: ";
+    auto stepRet = from(vec).step(2);
+    std::for_each(stepRet.begin(), stepRet.end(), [](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+
+    std::cout << "concat: ";
+    from(vec).concat(vec2).foreach([](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+
+    std::vector<int> out;
+    from(vec).except(vec3, out);
+    std::cout << "except: ";
+    std::for_each(out.begin(), out.end(), [](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+
+    std::vector<int> vec4 { -1, 1 };
+    std::cout << "is includes: " << from(vec).includes(vec4) << std::endl;
+    std::cout << "is includes: " << from(vec).includes(vec4, [](int i, int j){ return i > j; }) << std::endl;
+
+    std::multimap<int, int> mm = from(vec).groupby([](int i){ return i; });
+    for (auto& iter : mm)
+    {
+        std::cout << "key: " << iter.first << ", value: " << iter.second << std::endl;
+    }
+
+    std::vector<double> vec5 { 1.1, 2.3, 3.3 };
+    std::cout << "double to int: ";
+    from(vec5).cast<int>().foreach([](int i){ std::cout << i << " "; });
+    std::cout << std::endl;
+
+    std::vector<int> vec6 (vec.begin(), vec.end());
+    std::cout << "equals: " << from(vec6).equals(from(vec)) << std::endl;
+    std::cout << "equals: " << (from(vec6) == from(vec)) << std::endl;
+    std::cout << "equals: " << (from(vec6) != from(vec)) << std::endl;
+
     return 0;
 }
