@@ -36,7 +36,7 @@ class LinqCpp
 {
     R m_linqRange;
 public:
-    using valueType = typename R::value_type;
+    using ValueType = typename R::value_type;
     LinqCpp(R range) : m_linqRange(range) {}
 
     // 过滤操作.
@@ -72,13 +72,13 @@ public:
     }
 
     template<typename F>
-    auto first(const F& f)->valueType
+    auto first(const F& f)->ValueType
     {
         return *std::find_if(begin(), end(), f);
     }
 
     template<typename F>
-    auto last(const F& f)->valueType
+    auto last(const F& f)->ValueType
     {
         return reverse().first(f); 
     }
@@ -88,24 +88,24 @@ public:
         return begin() == end();
     }
 
-    auto max() const->valueType
+    auto max() const->ValueType
     {
         return *std::max_element(begin(), end());
     }
 
     template<typename F>
-    auto max(const F& f) const->valueType
+    auto max(const F& f) const->ValueType
     {
         return *std::max_element(begin(), end(), f);
     }
 
-    auto min() const->valueType
+    auto min() const->ValueType
     {
         return *std::min_element(begin(), end());
     }
 
     template<typename F>
-    auto min(const F& f) const->valueType
+    auto min(const F& f) const->ValueType
     {
         return *min_element(begin(), end(), f);
     }
@@ -123,16 +123,16 @@ public:
 
     // 累加器，对每一个元素进行一个运算.
     template<typename F>
-    auto aggregate(const F& f) const->valueType
+    auto aggregate(const F& f) const->ValueType
     {
         auto iter = begin();
         auto value = *iter++;
         return std::accumulate(iter, end(), std::move(value), f);
     }
 
-    auto sum() const->valueType
+    auto sum() const->ValueType
     {
-        return aggregate(std::plus<valueType>());
+        return aggregate(std::plus<ValueType>());
     }
 
     auto count() const->decltype(std::distance(begin(), end()))
@@ -147,7 +147,7 @@ public:
         return std::count_if(begin(), end(), f);
     }
 
-    auto average() const->valueType
+    auto average() const->ValueType
     {
         return sum() / count();
     }
@@ -200,7 +200,7 @@ public:
 
     // 获取指定索引位置的元素.
     template<typename T>
-    auto elementAt(T index) const->valueType
+    auto elementAt(T index) const->ValueType
     {
         return *std::next(begin(), index);
     }
@@ -241,9 +241,9 @@ public:
     }
 
     // 将range转换为vector.
-    std::vector<valueType> toVector()
+    std::vector<ValueType> toVector()
     {
-        return std::vector<valueType>(begin(), end());
+        return std::vector<ValueType>(begin(), end());
     }
 
     // 按步长挑选元素组成新集合.
@@ -268,7 +268,7 @@ public:
 
     // 排除操作.
     template<typename R2>
-    void except(const R2& other, std::vector<valueType>& out)
+    void except(const R2& other, std::vector<ValueType>& out)
     {
         std::set_difference(begin(), end(), std::begin(other), std::end(other), std::back_inserter(out));
     }
@@ -289,11 +289,11 @@ public:
 
     // 分组操作.
     template<typename Fn>
-    std::multimap<typename std::result_of<Fn(valueType)>::type, valueType> groupby(const Fn& f)
+    std::multimap<typename std::result_of<Fn(ValueType)>::type, ValueType> groupby(const Fn& f)
     {
-        using keyType = decltype(std::declval<Fn>()(std::declval<valueType>()));
-        std::multimap<keyType, valueType> m;
-        std::for_each(begin(), end(), [&m, &f](valueType item)
+        using keyType = decltype(std::declval<Fn>()(std::declval<ValueType>()));
+        std::multimap<keyType, ValueType> m;
+        std::for_each(begin(), end(), [&m, &f](ValueType item)
         {
             m.insert(std::make_pair(f(item), item)); 
         });
@@ -302,13 +302,13 @@ public:
 
     // 允许指定键和值函数的分组操作.
     template<typename KeyFn, typename ValueFn>
-    std::multimap<typename std::result_of<KeyFn(valueType)>::type, typename std::result_of<ValueFn(valueType)>::type>
+    std::multimap<typename std::result_of<KeyFn(ValueType)>::type, typename std::result_of<ValueFn(ValueType)>::type>
     groupby(const KeyFn& kfn, const ValueFn& vfn)
     {
-        using keyType = decltype(std::declval<KeyFn>()(std::declval<valueType>()));
-        using valType = decltype(std::declval<ValueFn>()(std::declval<valueType>()));
+        using keyType = decltype(std::declval<KeyFn>()(std::declval<ValueType>()));
+        using valType = decltype(std::declval<ValueFn>()(std::declval<ValueType>()));
         std::multimap<keyType, valType> m;
-        std::for_each(begin(), end(), [&m, &kfn, &vfn](valueType item)
+        std::for_each(begin(), end(), [&m, &kfn, &vfn](ValueType item)
         { 
             m.insert(std::make_pair(kfn(item), vfn(item)));
         });
@@ -317,10 +317,10 @@ public:
 
     // 转换操作.
     template<typename T>
-    auto cast()->LinqCpp<boost::transformed_range<std::function<T(valueType)>, R>>
+    auto cast()->LinqCpp<boost::transformed_range<std::function<T(ValueType)>, R>>
     {
-        std::function<T(valueType)> f = [](valueType item){ return static_cast<T>(item); };
-        return LinqCpp<boost::transformed_range<std::function<T(valueType)>, R>>(select(f));
+        std::function<T(ValueType)> f = [](ValueType item){ return static_cast<T>(item); };
+        return LinqCpp<boost::transformed_range<std::function<T(ValueType)>, R>>(select(f));
     }
     
     // 判断操作.
