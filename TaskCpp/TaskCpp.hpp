@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <future>
+#include <type_traits>
 
 namespace taskcpp
 {
@@ -33,6 +34,7 @@ public:
         return std::async(m_func);
     }
 
+#if 0
     template<typename F>
     auto then(F&& f)->Task<typename std::result_of<F(R)>::type(ArgsType...)>
     {
@@ -44,6 +46,7 @@ public:
             return std::async(f, ret.get()).get();
         });
     }
+#endif
 
 private:
     std::function<R(ArgsType...)> m_func;
