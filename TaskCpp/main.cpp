@@ -1,5 +1,6 @@
 #include <iostream>
 #include "TaskCpp.hpp"
+#include <thread>
 
 void testTask()
 {
@@ -13,9 +14,21 @@ void testTask()
     std::cout << "task3 ret: " << task3.get(3) << std::endl;
 }
 
+void testTaskGroup()
+{
+    taskcpp::TaskGroup g;
+    std::function<void()> f = []{ std::cout << "func" << std::endl; };
+    auto f2 = []{ std::cout << "func2" << std::endl; };
+    g.run(f);
+    g.run(f2);
+    g.run(f, f2, []{ std::cout << "func3" << std::endl; });
+    g.wait();
+}
+
 int main()
 {
     testTask();
+    testTaskGroup();
     return 0;
 }
 
