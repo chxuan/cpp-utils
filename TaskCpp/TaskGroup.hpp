@@ -4,12 +4,31 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 #include <boost/variant.hpp>
 #include <boost/any.hpp>
 #include "Task.hpp"
 
 namespace taskcpp
 {
+
+boost::any Func;
+
+template<typename T>
+void futureGet()
+{
+    boost::any_cast<std::shared_future<T>>(Func).get();
+}
+
+class Visitor : public boost::static_visitor<>
+{
+public:
+    template<typename T>
+    void operator()(const T&) const
+    {
+        futureGet<T>(); 
+    }
+};
 
 class TaskGroup
 {
@@ -54,6 +73,12 @@ public:
         for (auto& iter : m_voidGroup)
         {
             iter.get();
+        }
+
+        for (auto iter = m_group.begin(); iter != m_group.end(); ++iter)
+        {
+            Func = iter->second;
+            boost::apply_visitor(Visitor(), iter->first);
         }
     }
 

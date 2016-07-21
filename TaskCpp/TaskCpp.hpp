@@ -3,5 +3,6 @@
 
 #include "Task.hpp"
 #include "TaskGroup.hpp"
+#include "ParallelAlgorithm.hpp"
 
 #endif
