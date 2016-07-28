@@ -37,13 +37,15 @@ public:
         }
     }
 
-    void addTask(const Task& task)
+    template<typename Function, typename... Args>
+    void addTask(Function&& func, Args&&... args)
     {
         if (m_isStopThreadPool)
         {
             return;
         }
 
+        Task task = [&func, &args...]{ return func(std::forward<Args>(args)...); };
         {
             std::unique_lock<std::mutex> locker(m_taskQueueMutex);
             while (m_taskQueue.size() == MaxTaskQueueSize && !m_isStopThreadPool)
@@ -51,7 +53,7 @@ public:
                 m_taskPut.wait(locker);
             }
 
-            m_taskQueue.emplace(task);
+            m_taskQueue.emplace(std::move(task));
         }
 
         m_taskGet.notify_one();
