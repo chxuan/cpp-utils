@@ -2,6 +2,7 @@
 #define _RANGE_H
 
 #include <iostream>
+#include <exception>
 
 template<typename T>
 class RangeImpl
