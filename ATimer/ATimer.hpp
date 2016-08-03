@@ -12,6 +12,10 @@ class ATimer
 {
 public:
     ATimer() : m_timer(m_ios, Duration(0)) {}
+    ~ATimer()
+    {
+        stop();
+    }
 
     void start(unsigned int duration)
     {
