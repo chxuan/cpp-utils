@@ -15,7 +15,7 @@ int main()
 {
     std::cout << "Main thread id: " << std::this_thread::get_id() << std::endl;
 
-    ATimer t;
+    ATimer<> t;
     t.bind(test);
     t.bind(std::bind(test2));
     t.bind([]{ std::cout << "Hello C++" << std::endl; });

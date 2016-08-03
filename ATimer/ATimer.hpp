@@ -7,20 +7,21 @@
 #include <boost/timer.hpp>
 #include <boost/asio.hpp>
 
+template<typename Duration = boost::posix_time::milliseconds>
 class ATimer
 {
 public:
-    ATimer() : m_timer(m_ios, boost::posix_time::milliseconds(0)) {}
+    ATimer() : m_timer(m_ios, Duration(0)) {}
 
-    void start(unsigned int mill)
+    void start(unsigned int duration)
     {
         if (m_ios.stopped())
         {
             return;
         }
 
-        m_milliseconds = mill;
-        m_timer.expires_at(m_timer.expires_at() + boost::posix_time::milliseconds(m_milliseconds));
+        m_duration = duration;
+        m_timer.expires_at(m_timer.expires_at() + Duration(m_duration));
         m_func = [this]
         {
             m_timer.async_wait([this](const boost::system::error_code&)
@@ -29,7 +30,7 @@ public:
                 {
                     func();
                 }
-                m_timer.expires_at(m_timer.expires_at() + boost::posix_time::milliseconds(m_milliseconds));
+                m_timer.expires_at(m_timer.expires_at() + Duration(m_duration));
                 m_func();
             });
         };
@@ -58,7 +59,7 @@ private:
     std::function<void()> m_func;
     std::vector<std::function<void()>> m_funcVec;
     std::thread m_thread;
-    unsigned int m_milliseconds = 0;
+    unsigned int m_duration = 0;
 };
 
 #endif
