@@ -60,7 +60,7 @@ public:
 private:
     boost::asio::io_service m_ios;
     boost::asio::deadline_timer m_timer;
-    std::function<void()> m_func;
+    std::function<void()> m_func = nullptr;
     std::vector<std::function<void()>> m_funcVec;
     std::thread m_thread;
     unsigned int m_duration = 0;
