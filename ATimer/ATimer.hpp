@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <thread>
+#include <atomic>
 #include <functional>
 #include <boost/timer.hpp>
 #include <boost/asio.hpp>
@@ -11,7 +12,7 @@ template<typename Duration = boost::posix_time::milliseconds>
 class ATimer
 {
 public:
-    ATimer() : m_timer(m_ios, Duration(0)) {}
+    ATimer() : m_timer(m_ios, Duration(0)), m_isSingleShot(false) {}
     ~ATimer()
     {
         stop();
@@ -24,6 +25,7 @@ public:
             return;
         }
 
+        m_isActive = true;
         m_duration = duration;
         m_timer.expires_at(m_timer.expires_at() + Duration(m_duration));
         m_func = [this]
@@ -34,8 +36,12 @@ public:
                 {
                     func();
                 }
-                m_timer.expires_at(m_timer.expires_at() + Duration(m_duration));
-                m_func();
+
+                if (!m_isSingleShot)
+                {
+                    m_timer.expires_at(m_timer.expires_at() + Duration(m_duration));
+                    m_func();
+                }
             });
         };
 
@@ -50,11 +56,27 @@ public:
         {
             m_thread.join();
         }
+        m_isActive = false;
     }
 
     void bind(const std::function<void()>& func)
     {
         m_funcVec.emplace_back(func);
+    }
+
+    void setSingleShot(bool isSingleShot)
+    {
+        m_isSingleShot = isSingleShot; 
+    }
+
+    bool isSingleShot() const
+    {
+        return m_isSingleShot;
+    }
+
+    bool isActive() const
+    {
+        return m_isActive;
     }
 
 private:
@@ -64,6 +86,8 @@ private:
     std::vector<std::function<void()>> m_funcVec;
     std::thread m_thread;
     unsigned int m_duration = 0;
+    std::atomic<bool> m_isSingleShot;
+    bool m_isActive = false;
 };
 
 #endif
