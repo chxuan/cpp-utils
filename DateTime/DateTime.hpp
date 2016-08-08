@@ -28,10 +28,10 @@ public:
 private:
     static std::string time2string(time_t t)
     {
-		struct tm* tmNow = localtime(&t);
-		char timeStr[sizeof("yyyy-mm-dd hh:mm:ss")] = {'\0'};
-		std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tmNow);
-		return timeStr;
+        struct tm* tmNow = localtime(&t);
+	char timeStr[sizeof("yyyy-mm-dd hh:mm:ss")] = {'\0'};
+	std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tmNow);
+	return timeStr;
     }
 
     static time_t string2time(const std::string& timeStr)
