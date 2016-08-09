@@ -1,6 +1,7 @@
-#ifndef _STRING_H
-#define _STRING_H
+#ifndef _STRING_HPP
+#define _STRING_HPP
 
+#include <string.h>
 #include <iostream>
 #include <algorithm>
 #include <string>
@@ -59,7 +60,19 @@ public:
     {
         return toLower(str1) == toLower(str2);
     }
+
+    static std::vector<std::string> split(const std::string& str, const std::string& delimiter)
+    {
+        char* save = nullptr;
+        char* token = strtok_r(const_cast<char*>(str.c_str()), delimiter.c_str(), &save);
+        std::vector<std::string> result;
+        while (token != nullptr)
+        {
+            result.emplace_back(token);
+            token = strtok_r(nullptr, delimiter.c_str(), &save);
+        }
+        return result;
+    }
 };
 
-#endif 
-
+#endif

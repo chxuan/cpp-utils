@@ -13,5 +13,10 @@ int main()
     str = "Hello world";
     std::cout << String::startsWith(str, "Hello") << std::endl;
     std::cout << String::endsWith(str, "a") << std::endl;
+    std::vector<std::string> result = String::split(str, " ");
+    for (auto& iter : result)
+    {
+        std::cout << iter << std::endl;
+    }
     return 0;
 }
