@@ -1,5 +1,6 @@
 #include <iostream>
 #include "String.hpp"
+#include "Format.hpp"
 
 int main()
 {
@@ -18,5 +19,16 @@ int main()
     {
         std::cout << iter << std::endl;
     }
+
+    try
+    {
+        std::string str = "a = {0}, b = {1}";
+        std::cout << format(const_cast<char*>(str.c_str()), 10.23, 200) << std::endl;
+    }
+    catch (std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
     return 0;
 }
