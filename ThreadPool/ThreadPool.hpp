@@ -10,6 +10,7 @@
 #include <functional>
 #include <condition_variable>
 #include <atomic>
+#include <type_traits>
 
 static const unsigned int MaxTaskQueueSize = 100000;
 static const unsigned int MaxNumOfThread = 30;
@@ -43,7 +44,17 @@ public:
         if (!m_isStopThreadPool)
         {
             Task task = [&func, args...]{ return func(args...); };
-            addTask(task);
+            addTaskImpl(task);
+        }
+    }
+
+    template<typename Function, typename... Args>
+    typename std::enable_if<std::is_class<Function>::value>::type addTask(Function& func, Args... args)
+    {
+        if (!m_isStopThreadPool)
+        {
+            Task task = [&func, args...]{ return func(args...); };
+            addTaskImpl(task);
         }
     }
 
@@ -53,7 +64,7 @@ public:
         if (!m_isStopThreadPool)
         {
             Task task = [&func, &self, args...]{ return (*self.*func)(args...); };
-            addTask(task);
+            addTaskImpl(task);
         }
     }
 
@@ -63,7 +74,7 @@ public:
     }
 
 private:
-    void addTask(const Task& task)
+    void addTaskImpl(const Task& task)
     {
         {
             std::unique_lock<std::mutex> locker(m_taskQueueMutex);

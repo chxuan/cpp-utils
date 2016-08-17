@@ -17,13 +17,23 @@ class Test
 public:
     void print(const std::string& str, int i)
     {
-        std::cout << "str: " << str << "i: " << i << std::endl;
+        std::cout << "Test: " << str << ", i: " << i << std::endl;
+    }
+};
+
+class Test2
+{
+public:
+    void operator()(const std::string& str, int i)
+    {
+        std::cout << "Test2: " << str << ", i: " << i << std::endl;
     }
 };
 
 int main()
 {
     Test t;
+    Test2 t2;
     ThreadPool pool;
     pool.initThreadNum(10);
 
@@ -33,6 +43,7 @@ int main()
     {
         pool.addTask([]{ std::cout << "Hello ThreadPool" << std::endl; });
         pool.addTask(testTask, str);
+        pool.addTask(t2, str, i);
         pool.addTask(&Test::print, &t, str, i);
     }
 
