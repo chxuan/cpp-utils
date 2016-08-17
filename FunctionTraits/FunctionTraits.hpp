@@ -28,8 +28,8 @@ struct FunctionTraits<Ret(Args...)>
     template<std::size_t N>
     struct args
     {
-	static_assert(N < arity, "Index is out of range, index must less than sizeof Args");
-	using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
+        static_assert(N < arity, "Index is out of range, index must less than sizeof Args");
+        using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
     };
 #endif
 };
