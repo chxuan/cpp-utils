@@ -59,7 +59,7 @@ public:
 
     void stop()
     {
-        std::call_once(m_callFlag, [this]{terminateAll();});
+        std::call_once(m_callFlag, [this]{ terminateAll(); });
     }
 
 private:
