@@ -49,7 +49,7 @@ public:
     }
 
     template<typename Function, typename... Args>
-    typename std::enable_if<std::is_class<Function>::value>::type addTask(Function& func, Args... args)
+    void addTask(Function& func, Args... args)
     {
         if (!m_isStopThreadPool)
         {
