@@ -12,19 +12,28 @@ void testTask(const std::string& str)
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
 
+class Test
+{
+public:
+    void print(const std::string& str, int i)
+    {
+        std::cout << "str: " << str << "i: " << i << std::endl;
+    }
+};
+
 int main()
 {
+    Test t;
     ThreadPool pool;
     pool.initThreadNum(10);
 
-    for (int i = 0; i < 10; ++i)
+    std::string str = "Hello world";
+    
+    for (int i = 0; i < 1000; ++i)
     {
-        pool.addTask([]
-        {
-            std::cout << "Current thread id: " << std::this_thread::get_id() << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        });
-        pool.addTask(testTask, "Hello world");
+        pool.addTask([]{ std::cout << "Hello ThreadPool" << std::endl; });
+        pool.addTask(testTask, str);
+        pool.addTask(&Test::print, &t, str, i);
     }
 
     std::cin.get();

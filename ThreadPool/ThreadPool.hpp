@@ -38,14 +38,33 @@ public:
     }
 
     template<typename Function, typename... Args>
-    void addTask(Function&& func, Args&&... args)
+    void addTask(const Function& func, Args... args)
     {
-        if (m_isStopThreadPool)
+        if (!m_isStopThreadPool)
         {
-            return;
+            Task task = [&func, args...]{ return func(args...); };
+            addTask(task);
         }
+    }
 
-        Task task = [&func, &args...]{ return func(std::forward<Args>(args)...); };
+    template<typename Function, typename Self, typename... Args>
+    void addTask(const Function& func, Self* self, Args... args)
+    {
+        if (!m_isStopThreadPool)
+        {
+            Task task = [&func, &self, args...]{ return (*self.*func)(args...); };
+            addTask(task);
+        }
+    }
+
+    void stop()
+    {
+        std::call_once(m_callFlag, [this]{terminateAll();});
+    }
+
+private:
+    void addTask(const Task& task)
+    {
         {
             std::unique_lock<std::mutex> locker(m_taskQueueMutex);
             while (m_taskQueue.size() == MaxTaskQueueSize && !m_isStopThreadPool)
@@ -59,12 +78,6 @@ public:
         m_taskGet.notify_one();
     }
 
-    void stop()
-    {
-        std::call_once(m_callFlag, [this]{terminateAll();});
-    }
-
-private:
     void terminateAll()
     {
         m_isStopThreadPool = true;
