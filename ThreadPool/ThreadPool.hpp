@@ -12,8 +12,8 @@
 #include <atomic>
 #include <type_traits>
 
-static const unsigned int MaxTaskQueueSize = 100000;
-static const unsigned int MaxNumOfThread = 30;
+static const std::size_t MaxTaskQueueSize = 100000;
+static const std::size_t MaxNumOfThread = 30;
 
 class ThreadPool
 {
@@ -28,10 +28,10 @@ public:
         stop();
     }
 
-    void initThreadNum(unsigned int num)
+    void initThreadNum(std::size_t num)
     {
         assert(num > 0 && num <= MaxNumOfThread);
-        for (unsigned int i = 0; i < num; ++i)
+        for (std::size_t i = 0; i < num; ++i)
         {
             WorkerThreadPtr t = std::make_shared<std::thread>(std::bind(&ThreadPool::runTask, this));
             m_threadVec.emplace_back(t);
@@ -49,7 +49,7 @@ public:
     }
 
     template<typename Function, typename... Args>
-    void addTask(Function& func, Args... args)
+    typename std::enable_if<std::is_class<Function>::value>::type addTask(Function& func, Args... args)
     {
         if (!m_isStopThreadPool)
         {
@@ -96,9 +96,12 @@ private:
 
         for (auto& iter : m_threadVec)
         {
-            if (iter->joinable())
+            if (iter != nullptr)
             {
-                iter->join();
+                if (iter->joinable())
+                {
+                    iter->join();
+                }
             }
         }
         m_threadVec.clear();
