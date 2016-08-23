@@ -21,9 +21,17 @@ int main()
     t.start(1000);
 
     std::cin.get();
-    t0.stop();
     t.stop();
-    std::cout << "Tiemr stop" << std::endl;
+    std::cout << "Timer stop" << std::endl;
+
+    std::cin.get();
+    t.start();
+    std::cout << "Timer restart" << std::endl;
+
+    std::cin.get();
+    t0.destroy();
+    t.destroy();
+    std::cout << "Timer destroy" << std::endl;
 
     std::cin.get();
     std::cout << "Process end" << std::endl;

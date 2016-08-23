@@ -12,10 +12,10 @@ template<typename Duration = boost::posix_time::milliseconds>
 class ATimer
 {
 public:
-    ATimer() : m_timer(m_ios, Duration(0)), m_isSingleShot(false) {}
+    ATimer() : m_work(m_ios), m_timer(m_ios), m_isSingleShot(false) {}
     ~ATimer()
     {
-        stop();
+        destroy();
     }
 
     void start(unsigned int duration)
@@ -25,38 +25,46 @@ public:
             return;
         }
 
-        m_isActive = true;
         m_duration = duration;
-        m_timer.expires_at(m_timer.expires_at() + Duration(m_duration));
-        m_func = [this]
-        {
-            m_timer.async_wait([this](const boost::system::error_code&)
-            {
-                for (auto& func : m_funcVec)
-                {
-                    func();
-                }
-
-                if (!m_isSingleShot)
-                {
-                    m_timer.expires_at(m_timer.expires_at() + Duration(m_duration));
-                    m_func();
-                }
-            });
-        };
-
-        m_func();
         m_thread = std::thread([this]{ m_ios.run(); });
+        start();
+    }
+
+    void start()
+    {
+        m_timer.expires_from_now(Duration(m_duration));
+        m_timer.async_wait([this](const boost::system::error_code& ec)
+        {
+            if (ec)
+            {
+                return;
+            }
+
+            for (auto& func : m_funcVec)
+            {
+                func();
+            }
+
+            if (!m_isSingleShot)
+            {
+                start();
+            }
+        });
     }
 
     void stop()
     {
+        m_timer.cancel();
+    }
+
+    void destroy()
+    {
+        stop();
         m_ios.stop();
         if (m_thread.joinable())
         {
             m_thread.join();
         }
-        m_isActive = false;
     }
 
     void bind(const std::function<void()>& func)
@@ -69,25 +77,15 @@ public:
         m_isSingleShot = isSingleShot; 
     }
 
-    bool isSingleShot() const
-    {
-        return m_isSingleShot;
-    }
-
-    bool isActive() const
-    {
-        return m_isActive;
-    }
-
 private:
     boost::asio::io_service m_ios;
+    boost::asio::io_service::work m_work;
     boost::asio::deadline_timer m_timer;
     std::function<void()> m_func = nullptr;
     std::vector<std::function<void()>> m_funcVec;
     std::thread m_thread;
     unsigned int m_duration = 0;
     std::atomic<bool> m_isSingleShot;
-    bool m_isActive = false;
 };
 
 #endif
