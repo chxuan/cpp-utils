@@ -18,7 +18,7 @@ public:
         destroy();
     }
 
-    void start(unsigned int duration)
+    void start(std::size_t duration)
     {
         if (m_ios.stopped())
         {
@@ -84,7 +84,7 @@ private:
     std::function<void()> m_func = nullptr;
     std::vector<std::function<void()>> m_funcVec;
     std::thread m_thread;
-    unsigned int m_duration = 0;
+    std::size_t m_duration = 0;
     std::atomic<bool> m_isSingleShot;
 };
 
