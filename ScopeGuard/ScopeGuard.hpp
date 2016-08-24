@@ -16,7 +16,7 @@ public:
 
     ~ScopeGuard()
     {
-        if (!m_dismiss && m_func != nullptr)
+        if (!m_dismiss)
         {
             m_func();
         }
@@ -34,7 +34,7 @@ public:
     }
 
 private:
-    T m_func = nullptr;
+    T m_func;
     bool m_dismiss = false;
 };
 
