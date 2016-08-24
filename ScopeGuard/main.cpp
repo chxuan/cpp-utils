@@ -20,7 +20,7 @@ int main()
 
     {
         // 非正常退出，调用func函数
-        makeGuard(func);
+        auto ret = makeGuard(func);
     }
 
     return 0;
