@@ -7,7 +7,7 @@ template<typename T>
 class ScopeGuard
 {
 public:
-    ScopeGuard() = delete;
+    ScopeGuard() = default;
     ScopeGuard(const ScopeGuard&) = delete;
     ScopeGuard& operator=(const ScopeGuard&) = delete;
 
