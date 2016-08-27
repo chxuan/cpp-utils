@@ -1,5 +1,5 @@
-#ifndef _STRING_HPP
-#define _STRING_HPP
+#ifndef _STRINGUTIL_H
+#define _STRINGUTIL_H
 
 #include <string.h>
 #include <iostream>
@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-class String
+class StringUtil
 {
 public:
     static std::string trimLeft(const std::string& str, const std::string& token = " ")

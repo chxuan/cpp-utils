@@ -1,20 +1,20 @@
 #include <iostream>
-#include "String.hpp"
+#include "StringUtil.hpp"
 #include "Format.hpp"
 
 int main()
 {
     std::string str = "Hello world";
-    std::cout << String::trimLeft(str, "Hello") << std::endl;
-    std::cout << String::trimRight(str, "world") << std::endl;
+    std::cout << StringUtil::trimLeft(str, "Hello") << std::endl;
+    std::cout << StringUtil::trimRight(str, "world") << std::endl;
     str = "  nihao ";
-    std::cout << String::trim(str) << std::endl;
-    std::cout << String::toUpper(str) << std::endl;
-    std::cout << String::toLower(String::toUpper(str)) << std::endl;
+    std::cout << StringUtil::trim(str) << std::endl;
+    std::cout << StringUtil::toUpper(str) << std::endl;
+    std::cout << StringUtil::toLower(StringUtil::toUpper(str)) << std::endl;
     str = "Hello world";
-    std::cout << String::startsWith(str, "Hello") << std::endl;
-    std::cout << String::endsWith(str, "a") << std::endl;
-    std::vector<std::string> result = String::split(str, " ");
+    std::cout << StringUtil::startsWith(str, "Hello") << std::endl;
+    std::cout << StringUtil::endsWith(str, "a") << std::endl;
+    std::vector<std::string> result = StringUtil::split(str, " ");
     for (auto& iter : result)
     {
         std::cout << iter << std::endl;
