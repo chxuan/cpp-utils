@@ -35,14 +35,14 @@ public:
     static std::string toLower(const std::string& str)
     {
         std::string t = str;
-        std::transform(t.begin(), t.end(), t.begin(), tolower);
+        std::transform(t.begin(), t.end(), t.begin(), ::tolower);
         return t;
     }
 
     static std::string toUpper(const std::string& str)
     {
         std::string t = str;
-        std::transform(t.begin(), t.end(), t.begin(), toupper);
+        std::transform(t.begin(), t.end(), t.begin(), ::toupper);
         return t;
     }
 
