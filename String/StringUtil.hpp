@@ -64,14 +64,27 @@ public:
     static std::vector<std::string> split(const std::string& str, const std::string& delimiter)
     {
         char* save = nullptr;
+#ifdef _WIN32
+        char* token = strtok_s(const_cast<char*>(str.c_str()), delimiter.c_str(), &save);
+#else
         char* token = strtok_r(const_cast<char*>(str.c_str()), delimiter.c_str(), &save);
+#endif
         std::vector<std::string> result;
         while (token != nullptr)
         {
             result.emplace_back(token);
+#ifdef _WIN32
+            token = strtok_s(nullptr, delimiter.c_str(), &save);
+#else
             token = strtok_r(nullptr, delimiter.c_str(), &save);
+#endif
         }
         return result;
+    }
+
+    static bool contains(const std::string& str, const std::string& token)
+    {
+        return str.find(token) == std::string::npos ? false : true;
     }
 };
 
