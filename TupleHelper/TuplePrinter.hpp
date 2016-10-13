@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <tuple>
+#include <array>
 #include <utility>
 
 /***********递归+偏特化方式遍历打印tuple***************/
@@ -46,6 +47,19 @@ decltype(auto) operator<<(std::basic_ostream<Char, Traits>& os, const std::tuple
     os << "(";
     print_tuple_impl(os, t, std::index_sequence_for<Args...>{});
     return os << ")";
+}
+
+/***********将std::array转换成std::tuple，这里用到了C++14的index_sequence****************/
+template<typename Array, std::size_t... Index>
+decltype(auto) array2tuple_impl(const Array& a, std::index_sequence<Index...>)
+{
+    return std::make_tuple(a[Index]...);
+}
+
+template<typename T, std::size_t N>
+decltype(auto) array2tuple(const std::array<T, N>& a)
+{
+    return array2tuple_impl(a, std::make_index_sequence<N>{});
 }
 
 #endif
