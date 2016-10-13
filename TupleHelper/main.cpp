@@ -10,6 +10,9 @@ int main()
     printTuple(tp);
     printTuple(std::forward_as_tuple("Hello", "world"));
 
+    std::cout << "******std::cout*********" << std::endl;
+    std::cout << tp << std::endl;
+
     std::cout << "******TupleGet*********" << std::endl;
     auto a = getElementByType<double>(tp);
     std::cout << "double: " << a << std::endl;
