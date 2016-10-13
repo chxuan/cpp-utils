@@ -6,7 +6,7 @@
 #include <array>
 #include <utility>
 
-/***********递归+偏特化方式遍历打印tuple***************/
+/***********递归+特化方式遍历打印tuple***************/
 template<typename Tuple, std::size_t N>
 struct TuplePrinter
 {
