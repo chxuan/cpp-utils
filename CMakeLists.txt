@@ -34,6 +34,12 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/ATimer)
 add_subdirectory(${PROJECT_SOURCE_DIR}/MD5)
 add_subdirectory(${PROJECT_SOURCE_DIR}/DateTime)
 add_subdirectory(${PROJECT_SOURCE_DIR}/String)
+<<<<<<< HEAD
 add_subdirectory(${PROJECT_SOURCE_DIR}/Range)
 add_subdirectory(${PROJECT_SOURCE_DIR}/LinqCpp)
 add_subdirectory(${PROJECT_SOURCE_DIR}/thread_guard)
+=======
+add_subdirectory(${PROJECT_SOURCE_DIR}/invoke)
+add_subdirectory(${PROJECT_SOURCE_DIR}/Range)
+add_subdirectory(${PROJECT_SOURCE_DIR}/LinqCpp)
+>>>>>>> 5678edad6dc22c9f6ebea11f373b61520dd81866
