@@ -1,8 +1,6 @@
 samples
 ===================
-[![Build Status](https://travis-ci.org/chxuan/samples.svg?branch=master)](https://travis-ci.org/chxuan/samples)
-[![Coverage Status](https://coveralls.io/repos/github/chxuan/samples/badge.svg?branch=master)](https://coveralls.io/github/chxuan/samples?branch=master)
 
-一些C/C++例程：https://github.com/chxuan/samples.git
-我的博客地址：http://www.cnblogs.com/highway-9/
+个人博客：http://chengxuan.me/
+cnblogs：http://www.cnblogs.com/highway-9/
 
