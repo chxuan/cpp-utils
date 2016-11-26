@@ -15,7 +15,7 @@ public:
     template<typename... Args>
     static T& get_instance(Args&&... args)
     {
-        static T t {std::forward<Args>(args)...};
+        static T t{ std::forward<Args>(args)... };
         return t;
     }
 };
