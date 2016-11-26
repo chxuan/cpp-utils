@@ -20,7 +20,7 @@ public:
     }
 };
 
-#define DEFINE_SINGLETON(class_name); \
+#define DEFINE_SINGLETON(class_name) \
 public: \
 friend class Singleton<class_name>; \
 using singleton = Singleton<class_name>; \

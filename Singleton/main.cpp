@@ -7,7 +7,7 @@
 
 class A
 {
-    DEFINE_SINGLETON(A)
+    DEFINE_SINGLETON(A);
 public:
     A(const std::string& str)
         : m_str(str)
@@ -25,7 +25,7 @@ public:
 
 class B
 {
-    DEFINE_SINGLETON(B)
+    DEFINE_SINGLETON(B);
 public:
     B() = default;
     void print()
