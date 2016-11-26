@@ -5,8 +5,10 @@
 #include <string>
 #include "Singleton.hpp"
 
-struct A
+class A
 {
+    DEFINE_SINGLETON(A)
+public:
     A(const std::string& str)
         : m_str(str)
     {
@@ -18,11 +20,14 @@ struct A
         std::cout << m_str << std::endl;
     }
 
-    std::string m_str;
+    std::string m_str = "nihao";
 };
 
-struct B
+class B
 {
+    DEFINE_SINGLETON(B)
+public:
+    B() = default;
     void print()
     {
         std::cout << "Hello world" << std::endl;
@@ -32,9 +37,7 @@ struct B
 int main()
 {
     std::string str = "Hello C++11";
-    Singleton<A>::getInstance(str).print();
-    Singleton<A>::getInstance(str).print();
-    Singleton<B>::getInstance().print();
-    Singleton<B>::getInstance().print();
+    A::singleton::get_instance(str).print();
+    B::singleton::get_instance().print();
     return 0;
 }
