@@ -13,11 +13,21 @@ public:
     Singleton& operator=(const Singleton&) = delete;
 
     template<typename... Args>
-    static T& getInstance(Args&&... args)
+    static T& get_instance(Args&&... args)
     {
-        static T t(std::forward<Args>(args)...);
+        static T t{ std::forward<Args>(args)... };
         return t;
     }
 };
+
+#define DEFINE_SINGLETON(class_name) \
+public: \
+friend class Singleton<class_name>; \
+using singleton = Singleton<class_name>; \
+private: \
+virtual ~class_name() {} \
+class_name(const class_name&) = delete; \
+class_name& operator=(const class_name&) = delete; \
+public: 
 
 #endif
