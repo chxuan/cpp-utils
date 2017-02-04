@@ -31,20 +31,29 @@ int main()
 {
     Test t;
     Test2 t2;
-    thread_pool pool;
-    pool.init_thread_num(10);
 
-    std::string str = "Hello world";
-    
-    for (int i = 0; i < 1000; ++i)
+    try
     {
-        pool.add_task([]{ std::cout << "Hello ThreadPool" << std::endl; });
-        pool.add_task(test_task, str);
-        pool.add_task(t2, str, i);
-        pool.add_task(&Test::print, &t, str, i);
+        thread_pool pool;
+        pool.init_thread_num(10);
+
+        std::string str = "Hello world";
+
+        for (int i = 0; i < 1000; ++i)
+        {
+            pool.add_task([]{ std::cout << "Hello ThreadPool" << std::endl; });
+            pool.add_task(test_task, str);
+            pool.add_task(t2, str, i);
+            pool.add_task(&Test::print, &t, str, i);
+        }
+
+        std::cin.get();
+        std::cout << "##############END###################" << std::endl;
+    }
+    catch (std::exception& e)
+    {
+        std::cout << "Exception: " << e.what() << std::endl;
     }
 
-    std::cin.get();
-    std::cout << "##############END###################" << std::endl;
     return 0;
 }
