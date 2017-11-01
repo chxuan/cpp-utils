@@ -2,6 +2,7 @@
 
 #include "event_loop.hpp"
 #include <thread>
+#include <memory>
 
 class server
 {
@@ -13,13 +14,13 @@ public:
 
     ~server()
     {
+        thread_->join();
         std::cout << "server stoped..." << std::endl;
     }
 
     void start()
     {
-        std::thread t([this](){ task_thread(); });
-        t.detach();
+         thread_ = std::make_shared<std::thread>(std::bind(&server::task_thread, this));
     }
 
 private:
@@ -30,5 +31,9 @@ private:
             std::cout << "runing..." << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
+        std::cout << "thread end..." << std::endl;
     }
+
+private:
+    std::shared_ptr<std::thread> thread_;
 };
