@@ -26,8 +26,7 @@ public:
 private:
     static void sigint_handle(int sig)
     {
-        std::cout << sig << std::endl;
-        std::cout << "end" << std::endl;
+        std::cout << "end, sig: " << sig << std::endl;
         active_ = false;
     }
 

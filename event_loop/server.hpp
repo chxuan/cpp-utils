@@ -18,6 +18,13 @@ public:
 
     void start()
     {
+        std::thread t([this](){ task_thread(); });
+        t.detach();
+    }
+
+private:
+    void task_thread()
+    {
         while (event_loop::is_active())
         {
             std::cout << "runing..." << std::endl;
