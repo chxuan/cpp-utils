@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <signal.h>
 #include <iostream>
-#include <atomic>
 
 class event_loop
 {
@@ -40,7 +39,7 @@ private:
     }
 
 private:
-    static std::atomic<bool> active_;
+    static bool active_;
 };
 
-std::atomic<bool> event_loop::active_{ true };
+bool event_loop::active_ = true;
