@@ -22,7 +22,7 @@ public:
 
 int main()
 {
-    singletion<test>::get_instance()->print();
-    singletion<test>::get_instance()->print();
+    singletion<test>::get_instance().print();
+    singletion<test>::get_instance().print();
     return 0;
 }
