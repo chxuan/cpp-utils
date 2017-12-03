@@ -11,7 +11,7 @@ template<typename T>
 class singletion
 {
 public:
-	static T& get_instance() 
+    static T& get_instance() 
     {
         // C++11保证静态变量的线程安全
         static T t;
