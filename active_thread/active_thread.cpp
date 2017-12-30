@@ -1,5 +1,4 @@
 #include "active_thread.h"
-#include <iostream>
 
 active_thread::active_thread(const std::function<void()>& func) 
     : func_(func)
@@ -17,7 +16,6 @@ void active_thread::stop()
     active_ = false;
     if (thread_->joinable())
     {
-        std::cout << "join" << std::endl;
         thread_->join();
     }
 }

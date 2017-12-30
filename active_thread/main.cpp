@@ -12,6 +12,7 @@ int main()
     auto t = std::make_shared<active_thread>(std::bind(print));
 
     std::cin.get();
+    /* t->stop(); */
 
     return 0;
 }
