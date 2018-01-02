@@ -1,6 +1,6 @@
 /**
  * @file subscribe_center.h
- * @brief 订阅消息中心
+ * @brief 消息订阅中心
  * @author chxuan, 787280310@qq.com
  * @version 1.0.0
  * @date 2018-01-01
