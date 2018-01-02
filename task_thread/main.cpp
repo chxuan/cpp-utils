@@ -1,5 +1,5 @@
 #include <iostream>
-#include "active_thread.h"
+#include "task_thread.h"
 
 void print()
 {
@@ -9,7 +9,7 @@ void print()
 
 int main()
 {
-    auto t = std::make_shared<active_thread>(std::bind(print));
+    auto t = std::make_shared<task_thread>(std::bind(print));
 
     std::cin.get();
     /* t->stop(); */
