@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 配置文件路径
-config_file="./login.conf"
+config_file="/usr/local/etc/ssh_ip.conf"
 
 # 读取配置文件
 function read_config_file()
@@ -12,11 +12,11 @@ function read_config_file()
     echo "$value"
 }
 
-# 打印配置列表
-function print_item_list()
+# 打印IP地址列表
+function print_ip_address()
 {
-    item_count=100
-    echo "IP list:"
+    item_count=20
+    echo "IP地址列表:"
     for ((i=1; i<=${item_count}; i++))
     do
         section="item""$i"
@@ -27,10 +27,10 @@ function print_item_list()
     done
 }
 
-# 选择连接项
-function choice_item()
+# 选择IP地址
+function choice_ip_address()
 {
-    read -p "login to: " input
+    read -p "登录到:" input
     echo ${input}
 }
 
@@ -45,15 +45,15 @@ function login_to_server()
     if [[ ${ip} != "" && ${user_name} != "" ]]; then
         ssh "$user_name"@"$ip"
     else
-        echo "invaild IP or user name!"
+        echo "无效的IP地址或用户名！"
     fi
 }
 
 # main函数
 function main()
 {
-    print_item_list
-    item_index=`choice_item`
+    print_ip_address
+    item_index=`choice_ip_address`
     login_to_server "$item_index"
 }
 
