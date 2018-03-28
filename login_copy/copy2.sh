@@ -3,7 +3,7 @@
 # 配置文件路径
 config_file="/usr/local/etc/ssh_ip.conf"
 # 拷贝文件到target_dir
-target_dir="~/cx"
+target_dir="/home/chxuan/cx"
 
 # 读取配置文件
 function read_config_file()
@@ -32,7 +32,7 @@ function print_ip_address()
 # 选择IP地址
 function choice_ip_address()
 {
-    read -p "拷贝到:" input
+    read -p "从哪里拷贝:" input
     echo ${input}
 }
 
@@ -44,7 +44,7 @@ function copy_file()
     user_name=`read_config_file "$section" "user_name"`
 
     if [[ ${ip} != "" && ${user_name} != "" ]]; then
-        scp $file_names "$user_name"@"$ip":$target_dir
+        scp "$user_name"@"$ip:$file_names" $target_dir
         echo "$file_names""已经拷贝到""$target_dir"
     else
         echo "无效的IP地址或用户名！"
