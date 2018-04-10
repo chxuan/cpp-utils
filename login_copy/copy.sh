@@ -41,10 +41,11 @@ function copy_file()
 {
     section="item""$ip_index"
     ip=`read_config_file "$section" "ip"`
+    port=`read_config_file "$section" "port"`
     user_name=`read_config_file "$section" "user_name"`
 
-    if [[ ${ip} != "" && ${user_name} != "" ]]; then
-        scp $file_names "$user_name"@"$ip":$target_dir
+    if [[ ${ip} != "" && ${port} != "" && ${user_name} != "" ]]; then
+        scp -P $port $file_names "$user_name"@"$ip":$target_dir
         echo "$file_names""已经拷贝到""$target_dir"
     else
         echo "无效的IP地址或用户名！"

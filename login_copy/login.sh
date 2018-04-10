@@ -40,10 +40,11 @@ function login_to_server()
     item_index=$1
     section="item""$item_index"
     ip=`read_config_file "$section" "ip"`
+    port=`read_config_file "$section" "port"`
     user_name=`read_config_file "$section" "user_name"`
 
-    if [[ ${ip} != "" && ${user_name} != "" ]]; then
-        ssh "$user_name"@"$ip"
+    if [[ ${ip} != "" && ${port} != "" && ${user_name} != "" ]]; then
+        ssh -p $port "$user_name"@"$ip"
     else
         echo "无效的IP地址或用户名！"
     fi
