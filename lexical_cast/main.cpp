@@ -1,5 +1,5 @@
 #include <iostream>
-#include "lexical_cast.hpp"
+#include "lexical_cast.h"
 
 int main()
 {
