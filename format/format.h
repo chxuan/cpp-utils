@@ -34,10 +34,9 @@ get_arg_by_index(Tuple& tp, std::size_t index)
 template<typename... Args>
 inline std::string format(const char* str, Args&&... args)
 {
-    char arr[4096] = {'\0'};
-    char* buf = arr;
+    std::string buf;
     auto tp = std::tuple<Args...>(args...);
-    char* curr = (char*)str;
+    char* curr = const_cast<char*>(str);
     char* last = curr;
     int pos = -1;
 
@@ -46,12 +45,12 @@ inline std::string format(const char* str, Args&&... args)
         if (*curr == '{' && *(curr + 1) == '}') 
         {
             int len = curr - last;
-            memcpy(buf, last, len);
-            buf += len;
+            if (len != 0)
+            {
+                buf.append(last, len);
+            }
 
-            std::string arg = get_arg_by_index<0>(tp, ++pos);
-            memcpy(buf, arg.c_str(), arg.length());
-            buf += arg.length();
+            buf.append(get_arg_by_index<0>(tp, ++pos));
 
             last = curr + 2;
             ++curr;
@@ -59,14 +58,17 @@ inline std::string format(const char* str, Args&&... args)
         else if (*curr == '\0')
         {
             int len = curr - last;
-            memcpy(buf, last, len);
+            if (len != 0)
+            {
+                buf.append(last, len);
+            }
             break;
         }
 
         ++curr;
     }
 
-    return arr;
+    return buf;
 }
 
 template<typename... Args>

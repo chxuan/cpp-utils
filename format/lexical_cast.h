@@ -67,6 +67,7 @@ struct converter<std::string, From>
     static std::string convert(float from) { return std::to_string(from); }
     static std::string convert(const std::string& from) { return from; }
     static std::string convert(const char* from) { return from; }
+    static std::string convert(char from) { return std::string(&from); }
 };
 
 // 简化调用
