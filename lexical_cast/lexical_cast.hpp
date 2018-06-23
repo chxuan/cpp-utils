@@ -1,126 +1,78 @@
-#ifndef _LEXICAL_CAST_H
-#define _LEXICAL_CAST_H
-
-#include <cctype>
-#include <cstring>
-#include <cstdlib>
+#pragma once
+/*
+功能:封装类型转换
+日期:2018.5.11
+作者:chengxuan
+*/
 #include <string>
-#include <algorithm>
-#include <stdexcept>
-#include <type_traits>
 
-namespace detail
-{
-
-const char* strue = "true";
-const char* sfalse = "false";
-
+// 模板特化定义
 template<typename To, typename From>
-struct Converter {};
+struct converter {};
 
-// to numeric
+// 转换到int类型
 template<typename From>
-struct Converter<int, From>
+struct converter<int, From>
 {
-    static int convert(const std::string& from)
-    {
-        return std::atoi(from.c_str());
-    }
-
-    static int convert(const char* from)
-    {
-        return std::atoi(from);
-    }
+    static int convert(const std::string& from) { return std::atoi(from.c_str()); }
+    static int convert(const char* from) { return std::atoi(from); }
 };
 
+// 转换到long类型
 template<typename From>
-struct Converter<long, From>
+struct converter<long, From>
 {
-    static long convert(const std::string& from)
-    {
-        return std::atol(from.c_str());
-    }
-
-    static long convert(const char* from)
-    {
-        return std::atol(from);
-    }
+    static long convert(const std::string& from) { return std::atol(from.c_str()); }
+    static long convert(const char* from) { return std::atol(from); }
 };
 
+// 转换到long long类型
 template<typename From>
-struct Converter<long long, From>
+struct converter<long long, From>
 {
-    static long long convert(const std::string& from)
-    {
-        return std::atoll(from.c_str());
-    }
-
-    static long long convert(const char* from)
-    {
-        return std::atoll(from);
-    }
+    static long long convert(const std::string& from) { return std::atoll(from.c_str()); }
+    static long long convert(const char* from) { return std::atoll(from); }
 };
 
+// 转换到double类型
 template<typename From>
-struct Converter<double, From>
+struct converter<double, From>
 {
-    static double convert(const std::string& from)
-    {
-        return std::atof(from.c_str());
-    }
-
-    static double convert(const char* from)
-    {
-        return std::atof(from);
-    }
+    static double convert(const std::string& from) { return std::atof(from.c_str()); }
+    static double convert(const char* from) { return std::atof(from); }
 };
 
+// 转换到float类型
 template<typename From>
-struct Converter<float, From>
+struct converter<float, From>
 {
-    static float convert(const std::string& from)
-    {
-        return static_cast<float>(std::atof(from.c_str()));
-    }
-
-    static float convert(const char* from)
-    {
-        return static_cast<float>(std::atof(from));
-    }
+    static float convert(const std::string& from) { return static_cast<float>(std::atof(from.c_str())); }
+    static float convert(const char* from) { return static_cast<float>(std::atof(from)); }
 };
 
-// to bool
+// 转换到bool类型
 template<typename From>
-struct Converter<bool, From>
+struct converter<bool, From>
 {
-    static typename std::enable_if<std::is_integral<From>::value, bool>::type convert(From from)
-    {
-        return from > 0 ? true : false;
-    }
+    static bool convert(int from) { return from > 0 ? true : false; }
+    static bool convert(const std::string from) { return std::atoi(from.c_str()) > 0 ? true : false; }
 };
 
-// to string
+// 转换到string类型
 template<typename From>
-struct Converter<std::string, From>
+struct converter<std::string, From>
 {
-    static std::string convert(const From& from)
-    {
-        return std::to_string(from);
-    }
+    static std::string convert(int from) { return std::to_string(from); }
+    static std::string convert(double from) { return std::to_string(from); }
+    static std::string convert(float from) { return std::to_string(from); }
+    static std::string convert(const std::string& from) { return from; }
+    static std::string convert(const char* from) { return from; }
 };
 
-};
-
+// 简化调用
 template<typename To, typename From>
-typename std::enable_if<!std::is_same<To, From>::value, To>::type lexical_cast(const From& from)
+To lexical_cast(const From& from)
 {
-    return detail::Converter<To, From>::convert(from);
+    return converter<To, From>::convert(from);
 }
 
-template<typename To, typename From>
-typename std::enable_if<std::is_same<To, From>::value, To>::type lexical_cast(const From& from)
-{
-    return from;
-}
-
-#endif
