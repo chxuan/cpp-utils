@@ -17,7 +17,7 @@ get_arg_by_index(Tuple&, std::size_t)
     throw std::invalid_argument("Arg index out of range");
 }
 
-template<std::size_t i, typename Tuple>
+template<std::size_t i = 0, typename Tuple>
 inline typename std::enable_if<(i < std::tuple_size<Tuple>::value), std::string>::type 
 get_arg_by_index(Tuple& tp, std::size_t index)
 {
@@ -50,7 +50,7 @@ inline std::string format(const char* str, Args&&... args)
                 buf.append(last, len);
             }
 
-            buf.append(get_arg_by_index<0>(tp, ++pos));
+            buf.append(get_arg_by_index(tp, ++pos));
 
             last = curr + 2;
             ++curr;
