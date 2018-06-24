@@ -50,7 +50,7 @@ inline std::string format(const char* str, Args&&... args)
                 buf.append(last, len);
             }
 
-            buf.append(get_arg_by_index(tp, ++pos));
+            buf.append(get_arg_by_index<0>(tp, ++pos));
 
             last = curr + 2;
             ++curr;
