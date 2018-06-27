@@ -23,3 +23,7 @@ include_directories(./)
 
 # 可执行程序
 add_executable(${OUT_NAME} ${SOURCE_FILES})
+
+# 连接库
+set(LINK_LIST pthread)
+target_link_libraries(${OUT_NAME} ${LINK_LIST})

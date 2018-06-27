@@ -5,6 +5,7 @@
 作者:chxuan <787280310@qq.com>
 */
 #include <string>
+#include <thread>
 
 // 模板特化定义
 template<typename To, typename From>
@@ -63,11 +64,17 @@ template<typename From>
 struct converter<std::string, From>
 {
     static std::string convert(int from) { return std::to_string(from); }
+    static std::string convert(unsigned int from) { return std::to_string(from); }
+    static std::string convert(long long from) { return std::to_string(from); }
+    static std::string convert(unsigned long long from) { return std::to_string(from); }
+    static std::string convert(long from) { return std::to_string(from); }
+    static std::string convert(unsigned long from) { return std::to_string(from); }
     static std::string convert(double from) { return std::to_string(from); }
     static std::string convert(float from) { return std::to_string(from); }
     static std::string convert(const std::string& from) { return from; }
     static std::string convert(const char* from) { return from; }
     static std::string convert(char from) { return std::string(&from); }
+    static std::string convert(const std::thread::id& id) { unsigned long long* ptr = (unsigned long long*)(&id); return std::to_string((*ptr)); }
 };
 
 // 简化调用
