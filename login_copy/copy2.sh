@@ -3,7 +3,7 @@
 # 配置文件路径
 config_file="/usr/local/etc/ssh_ip.conf"
 # 拷贝文件到target_dir
-target_dir="/home/chxuan/cx"
+target_dir="${HOME}""/cx"
 
 # 读取配置文件
 function read_config_file()
