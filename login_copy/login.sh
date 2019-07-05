@@ -15,7 +15,7 @@ function read_config_file()
 # 打印IP地址列表
 function print_ip_address()
 {
-    item_count=20
+    item_count=100
     echo "IP地址列表:"
     for ((i=1; i<=${item_count}; i++))
     do

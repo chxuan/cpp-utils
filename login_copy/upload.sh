@@ -17,7 +17,7 @@ function read_config_file()
 # 打印IP地址列表
 function print_ip_address()
 {
-    item_count=20
+    item_count=100
     echo "IP地址列表:"
     for ((i=1; i<=${item_count}; i++))
     do
@@ -32,7 +32,7 @@ function print_ip_address()
 # 选择IP地址
 function choice_ip_address()
 {
-    read -p "拷贝到:" input
+    read -p "上传到:" input
     echo ${input}
 }
 
@@ -45,8 +45,8 @@ function copy_file()
     user_name=`read_config_file "$section" "user_name"`
 
     if [[ ${ip} != "" && ${port} != "" && ${user_name} != "" ]]; then
-        scp -P $port $file_names "$user_name"@"$ip":$target_dir
-        echo "$file_names""已经拷贝到""$target_dir"
+        scp -P $port -r $file_names "$user_name"@"$ip":$target_dir
+        echo "$file_names""已经上传到""$target_dir"
     else
         echo "无效的IP地址或用户名！"
     fi
