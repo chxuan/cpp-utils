@@ -4,7 +4,7 @@
 import os
 
 # 配置文件路径
-file_path="ssh_ip.conf"
+file_path="/usr/local/etc/ssh_ip.conf"
 
 # 读取文件
 def readlines():

@@ -5,7 +5,7 @@ import os
 import sys
 
 # 配置文件路径
-file_path="ssh_ip.conf"
+file_path="/usr/local/etc/ssh_ip.conf"
 # 文件保存路径
 save_path="~/cx"
 
