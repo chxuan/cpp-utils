@@ -25,11 +25,12 @@ def readlines():
 
 # 打印IP地址列表
 def print_ip_address(ips):
-    print("IP地址列表:")
+    print("ID              IP             PORT        用户名            备注")
     i = 0
     for line in ips:
         i = i + 1
-        print("[" + str(i) + "]:" + line.split(",")[0])
+        arr = line.split(",")
+        print '%-10d %-20s %-10s %-15s %s' % (i, arr[0], arr[1], arr[2], arr[3])
 
 
 # 选择IP地址
@@ -42,14 +43,8 @@ def choice_ip_address():
 def download_file(ips, i, filenames):
     if (i >= 1 and i <= len(ips)):
         arr = ips[i - 1].split(",")
-        if (len(arr) == 2):
-            os.system("scp -r " + arr[1] + "@" + arr[0] + ":" + filenames + " " + save_path)
-            print(filenames + "已经下载到" + save_path)
-        elif (len(arr) == 3):
-            os.system("scp -P " + arr[1] + " -r " + arr[2] + "@" + arr[0] + ":" + filenames + " " + save_path)
-            print(filenames + "已经下载到" + save_path)
-        else:
-            print("无效的IP地址或用户名！")
+        os.system("scp -P " + arr[1] + " -r " + arr[2] + "@" + arr[0] + ":" + filenames + " " + save_path)
+        print(filenames + "已经下载到" + save_path)
     else:
         print("无效的IP地址或用户名！")
     

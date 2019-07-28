@@ -22,11 +22,12 @@ def readlines():
 
 # 打印IP地址列表
 def print_ip_address(ips):
-    print("IP地址列表:")
+    print("ID              IP             PORT        用户名            备注")
     i = 0
     for line in ips:
         i = i + 1
-        print("[" + str(i) + "]:" + line.split(",")[0])
+        arr = line.split(",")
+        print '%-10d %-20s %-10s %-15s %s' % (i, arr[0], arr[1], arr[2], arr[3])
 
 
 # 选择IP地址
@@ -38,12 +39,7 @@ def choice_ip_address():
 def login_to_server(ips, i):
     if (i >= 1 and i <= len(ips)):
         arr = ips[i - 1].split(",")
-        if (len(arr) == 2):
-            os.system("ssh " + arr[1] + "@" + arr[0])
-        elif (len(arr) == 3):
-            os.system("ssh -p " + arr[1] + " " + arr[2] + "@" + arr[0])
-        else:
-            print("无效的IP地址或用户名！")
+        os.system("ssh -p " + arr[1] + " " + arr[2] + "@" + arr[0])
     else:
         print("无效的IP地址或用户名！")
     
