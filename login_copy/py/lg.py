@@ -22,7 +22,7 @@ def readlines():
 
 # 打印IP地址列表
 def print_ip_address(ips):
-    print '%-10s %-20s %-10s %-15s %9s' % ("ID", "IP", "PORT", "用户名", "备注")
+    print '\033[1;32m%-10s %-20s %-10s %-15s %9s\033[0m' % ("ID", "IP", "PORT", "用户名", "备注")
     i = 0
     for line in ips:
         i = i + 1
