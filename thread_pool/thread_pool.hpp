@@ -75,24 +75,23 @@ private:
     {
         std::unique_lock<std::mutex> locker(_task_queue_mutex);
         _task_queue.emplace(std::move(task));
-        locker.unlock();
-
         _task_get.notify_one();
     }
 
     void terminate_all()
     {
+        std::unique_lock<std::mutex> locker(_task_queue_mutex);
+
         _is_stop_threadpool = true;
         _task_get.notify_all();
 
+        locker.unlock();
+
         for (auto& iter : _thread_vec)
         {
-            if (iter != nullptr)
+            if (iter != nullptr && iter->joinable())
             {
-                if (iter->joinable())
-                {
-                    iter->join();
-                }
+                iter->join();
             }
         }
         _thread_vec.clear();
@@ -105,36 +104,38 @@ private:
         while (true)
         {
             task_t task = nullptr;
+
+            std::unique_lock<std::mutex> locker(_task_queue_mutex);
+
+            while (_task_queue.empty() && !_is_stop_threadpool)
             {
-                std::unique_lock<std::mutex> locker(_task_queue_mutex);
-                while (_task_queue.empty() && !_is_stop_threadpool)
-                {
-                    _task_get.wait(locker);
-                }
-
-                if (_is_stop_threadpool)
-                {
-                    break;
-                }
-
-                if (!_task_queue.empty())
-                {
-                    task = std::move(_task_queue.front());
-                    _task_queue.pop();
-                }
+                _task_get.wait(locker);
             }
+
+            if (_is_stop_threadpool)
+            {
+                break;
+            }
+
+            if (!_task_queue.empty())
+            {
+                task = std::move(_task_queue.front());
+                _task_queue.pop();
+            }
+
+            _task_put.notify_one();
+
+            locker.unlock();
 
             if (task != nullptr)
             {
                 task();
-                _task_put.notify_one();
             }
         }
     }
 
     void clean_task_queue()
     {
-        std::lock_guard<std::mutex> locker(_task_queue_mutex);
         while (!_task_queue.empty())
         {
             _task_queue.pop();
