@@ -18,14 +18,15 @@ public:
 
     void notify_one()
     {
+        std::unique_lock<std::mutex> lock(mutex_);
         cond_.notify_one();
     }
 
     void put(const T& message)
     {
         std::unique_lock<std::mutex> lock(mutex_);
+
         buffer_.emplace_back(message);
-        lock.unlock();
         if (buffer_.size() >= buffer_size_)
         {
             cond_.notify_one();
@@ -35,10 +36,12 @@ public:
     std::list<T> get()
     {
         std::unique_lock<std::mutex> lock(mutex_);
+
         while (buffer_.empty())
         {
             cond_.wait(lock);
         }
+
         return std::move(buffer_);
     }
 

@@ -1,8 +1,10 @@
 #include <iostream>
 #include <thread>
+#include <atomic>
 #include "message_buffer.hpp"
 
 message_buffer<int> buffer(500);
+std::atomic<bool> is_stop{ false };
 
 void test1()
 {
@@ -15,7 +17,7 @@ void test1()
 
 void test2()
 {
-    while (true)
+    while (!is_stop)
     {
         std::list<int> result = buffer.get();
         std::cout << "size: " << result.size() << ", " << result.back() << std::endl;
@@ -27,6 +29,7 @@ int main()
     std::thread t1(test1);
     std::thread t2(test2);
     t1.join();
+    is_stop = true;
     buffer.notify_one();
     t2.join();
     return 0;
