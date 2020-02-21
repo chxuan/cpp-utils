@@ -123,8 +123,6 @@ private:
                 _task_queue.pop();
             }
 
-            _task_put.notify_one();
-
             locker.unlock();
 
             if (task != nullptr)
@@ -152,7 +150,6 @@ private:
 
 private:
     std::vector<work_thread_ptr> _thread_vec;
-    std::condition_variable _task_put;
     std::condition_variable _task_get;
     std::mutex _task_queue_mutex;
     std::queue<task_t> _task_queue;
