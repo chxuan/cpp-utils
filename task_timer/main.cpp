@@ -11,7 +11,7 @@ int main()
     std::cout << "Main thread id: " << std::this_thread::get_id() << std::endl;
 
     task_timer<> t0;
-    t0.setSingleShot(true);
+    t0.set_single_shot(true);
     t0.bind(test);
     t0.start(100);
 
