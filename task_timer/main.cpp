@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ATimer.hpp"
+#include "task_timer.h"
 
 void test()
 {
@@ -10,12 +10,12 @@ int main()
 {
     std::cout << "Main thread id: " << std::this_thread::get_id() << std::endl;
 
-    ATimer<> t0;
+    task_timer<> t0;
     t0.setSingleShot(true);
     t0.bind(test);
     t0.start(100);
 
-    ATimer<> t;
+    task_timer<> t;
     t.bind(test);
     t.bind([]{ std::cout << "Hello C++" << std::endl; });
     t.start(1000);
