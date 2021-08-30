@@ -34,6 +34,16 @@ public:
     }
 };
 
+class C
+{
+public:
+    void before(int n)
+    {
+        std::cout << "before from C: " << n << std::endl;
+    }
+
+};
+
 void coreFunc(int n)
 {
     std::cout << "invoke coreFunc: " << n << std::endl;
@@ -46,7 +56,7 @@ void coreFunc2()
 
 int main()
 {
-    aopInvoke<A, B>(&coreFunc, 100);
+    aopInvoke<A, B, C>(&coreFunc, 100);
     aopInvoke<AopTimer>(&coreFunc2);
     return 0;
 }
