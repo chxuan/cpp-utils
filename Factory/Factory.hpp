@@ -20,10 +20,10 @@ public:
         m_messageMap.emplace(key, []{ return new T(); });
     }
 
-    template<typename T, typename... Args>
-    static void registerMessage(int key, Args... args)
+    template <typename T, typename... Args>
+    static void registerMessage(int key, const Args&... args)
     {
-        m_messageMap.emplace(key, [&]{ return new T(args...); });
+        m_messageMap.emplace(key, [=] { return new T(args...); });
     }
 
     static Message* get(int key)
@@ -46,10 +46,13 @@ public:
         return std::shared_ptr<Message>(get(key));
     }
 
-private:
-    static std::unordered_map<int, std::function<Message*()>> m_messageMap;
-};
+    using MessageID = int;
+    using MessageCreationFunc = std::function<Message*()>;
 
-std::unordered_map<int, std::function<Message*()>> Factory::m_messageMap;
+private:
+    static std::unordered_map<MessageID, MessageCreationFunc> m_messageMap;
+};
+// warning : this imply header only include once
+std::unordered_map<Factory::MessageID, Factory::MessageCreationFunc> Factory::m_messageMap;
 
 #endif
