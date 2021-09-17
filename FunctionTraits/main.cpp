@@ -1,11 +1,19 @@
-#include <iostream>
-#include <string>
 #include "FunctionTraits.hpp"
+#include <iostream>
+#if defined(__GNUC__)
+#include <cxxabi.h>
+#endif
+#include <string>
+#include <typeinfo>
 
 template<typename T>
 void printType()
 {
+#if defined(__GNUC__)
+    std::cout << abi::__cxa_demangle(typeid(T).name(), nullptr, nullptr, nullptr) << std::endl;
+#else    
     std::cout << typeid(T).name() << std::endl;
+#endif    
 }
 
 float (*func)(std::string, int);
