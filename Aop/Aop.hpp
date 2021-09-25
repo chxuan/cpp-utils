@@ -62,13 +62,26 @@ public:
     }
 
     template<typename Head, typename... Tail>
-    void invoke(Args&&... args, Head&& headAsp, Tail&&... tailAsp)
+    typename std::enable_if<HasMemberbefore<Head, Args...>::value && HasMemberafter<Head, Args...>::value>::type invoke(Args&&... args, Head&& headAsp, Tail&&... tailAsp)
     {
         headAsp.before(std::forward<Args>(args)...);
         invoke(std::forward<Args>(args)..., std::forward<Tail>(tailAsp)...);
         headAsp.after(std::forward<Args>(args)...);
     }
 
+    template<typename Head, typename... Tail>
+    typename std::enable_if<!HasMemberbefore<Head, Args...>::value && HasMemberafter<Head, Args...>::value>::type invoke(Args&&... args, Head&& headAsp, Tail&&... tailAsp)
+    {
+        invoke(std::forward<Args>(args)..., std::forward<Tail>(tailAsp)...);
+        headAsp.after(std::forward<Args>(args)...);
+    }
+
+    template<typename Head, typename... Tail>
+    typename std::enable_if<HasMemberbefore<Head, Args...>::value && !HasMemberafter<Head, Args...>::value>::type invoke(Args&&... args, Head&& headAsp, Tail&&... tailAsp)
+    {
+        headAsp.before(std::forward<Args>(args)...);
+        invoke(std::forward<Args>(args)..., std::forward<Tail>(tailAsp)...);
+    }
 private:
     Function m_func = nullptr; // 被织入的函数
 };
